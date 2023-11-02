@@ -4,7 +4,7 @@
 - Projektin kieli on Python
 - Pythonin lisäksi hallitsen erinomaisesti JavaScript-kielen.
 - Projektissa parhaan siirron laskemiseksi käytetään minimax algoritmiä ja alpha-beta karsintaa.
-- [Viikkoraportit](../viikkoraportit)
+- [Viikkoraportit](./viikkoraportit)
 
 ## Algoritmit
 Valitsin minimax-algoritmin, koska se on suhteellisen yksinkertainen totetutaa, ja soveltuu shakkitekoälyn kehittämiseen kohtalaisen hyvin etenkin, jos neuroverkkoja ei voi käyttää. Alpha-beta karsinta soveltuu tämän algoritmin tehostamiseen, ja on välttämätön jos liikkeitä haluaa laskea jokseenkin järkevässä ajassa kolmea siirtoa pidemmälle. 
