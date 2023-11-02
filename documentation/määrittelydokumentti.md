@@ -4,6 +4,7 @@
 - Projektin kieli on Python
 - Pythonin lisäksi hallitsen erinomaisesti JavaScript-kielen.
 - Projektissa parhaan siirron laskemiseksi käytetään minimax algoritmiä ja alpha-beta karsintaa.
+- projekti toteutetaan komentorivikäyttöliittymällä, johon käyttäjä syöttää siirron, ja johon ohjelma vastaa omalla siirrollaan.
 - [Viikkoraportit](./viikkoraportit)
 
 ## Algoritmit
