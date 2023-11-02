@@ -7,7 +7,7 @@
 - [Viikkoraportit](./viikkoraportit)
 
 ## Projektin laajuus
-projekti toteutetaan komentorivikäyttöliittymällä, jolle käyttäjä voi syöttää siirtonsa, ja johon ohjelma vastaa omalla siirrollaan. Alustavasti suunnitelmissa ei ole toteuttaa suoraa toiminnallisuutta, joka mahdollistaisi tietokoneen pelaamisen itseään vastaan.
+projekti toteutetaan komentorivikäyttöliittymällä, jolle käyttäjä voi syöttää siirtonsa, ja johon ohjelma vastaa omalla siirrollaan. Alustavasti suunnitelmissa ei ole toteuttaa suoraa toiminnallisuutta, joka mahdollistaisi tietokoneen pelaamisen itseään vastaan. Ohjelma osaa pelata shakkipelin alusta loppuun, mutta ei osaa antaa siirtoa satunnaisesti annettuun pelitilanteeseen.
 
 ## Algoritmit
 
