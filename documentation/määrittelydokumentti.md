@@ -10,7 +10,8 @@
 projekti toteutetaan komentorivikäyttöliittymällä, jolle käyttäjä voi syöttää siirtonsa, ja johon ohjelma vastaa omalla siirrollaan. Alustavasti suunnitelmissa ei ole toteuttaa suoraa toiminnallisuutta, joka mahdollistaisi tietokoneen pelaamisen itseään vastaan.
 
 ## Algoritmit
-Valitsin minimax-algoritmin, koska se on suhteellisen yksinkertainen totetutaa, ja soveltuu shakkitekoälyn kehittämiseen kohtalaisen hyvin etenkin, jos neuroverkkoja ei voi käyttää. Alpha-beta karsinta soveltuu tämän algoritmin tehostamiseen, ja on välttämätön jos liikkeitä haluaa laskea jokseenkin järkevässä ajassa kolmea siirtoa pidemmälle. 
+
+Ongelma, jonka projekti haluaa ratkaista, on hyvän siirron keksiminen shakkipelin jokaisessa vaiheessa. Valitsin minimax-algoritmin, koska se on suhteellisen yksinkertainen totetutaa, ja soveltuu shakkitekoälyn kehittämiseen kohtalaisen hyvin etenkin, jos neuroverkkoja ei voi käyttää. Alpha-beta karsinta soveltuu tämän algoritmin tehostamiseen, ja on välttämätön jos liikkeitä haluaa laskea jokseenkin järkevässä ajassa kolmea siirtoa pidemmälle. 
 
 Sallitut siirrot lasketaan laskentatehon säästämiseksi ahneella algoritmillä, päivittämällä mahdolliset siirrot jokaisen siirron jälkeen. Alkuperäisessä suunnitelmassa pelaaja syöttää siirtonsa komentorivillä, johon ohjelma vastaa omalla siirrollaan. 
 
