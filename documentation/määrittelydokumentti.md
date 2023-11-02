@@ -15,7 +15,7 @@ Ongelma, jonka projekti haluaa ratkaista, on hyvän siirron keksiminen shakkipel
 
 Sallitut siirrot lasketaan laskentatehon säästämiseksi ahneella algoritmillä, päivittämällä mahdolliset siirrot jokaisen siirron jälkeen. Alkuperäisessä suunnitelmassa pelaaja syöttää siirtonsa komentorivillä, johon ohjelma vastaa omalla siirrollaan. 
 
-Siirron laskemiseksi aikavaativuus on O(n^3) ja tilavaativuus O(n), Missä n on laillisten siirtojen lukumäärä. Tässä tapauksessa ennakoitavien siirtojen lukumäärä on 3. Tavoite laillisten siirtojen päivittämisen aikavaativuudelle on O(n) ja tilavaativuudelle O(1).
+Siirron laskemiseksi aikavaativuus on O(n^3) ja tilavaativuus O(n), Missä n on laillisten siirtojen lukumäärä. Tässä tapauksessa ennakoitavien siirtojen lukumäärä on 3. Tavoite laillisten siirtojen päivittämisen aikavaativuudelle on O(n) ja tilavaativuudelle O(1), Missä n on uusien laillisten siirtojen lukumäärä jokaisen siirron jälkeen.
 
 ## Lisätietoja
 - opinto-ohjelma tietojenkäsittelytieteen kandidaatti (TKT)
