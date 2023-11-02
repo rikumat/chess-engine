@@ -15,7 +15,7 @@ Siirron laskemiseksi aikavaativuus on O(n^3) ja tilavaativuus O(n), Missä n on 
 
 ## Lisätietoja
 - opinto-ohjelma tietojenkäsittelytieteen kandidaatti (TKT)
-- Dokumentaation kieli: Englanti (kaikki muut paitsi määrittelydokumentti ja viikkoraportit.)
+- Dokumentaation kieli: kaikki kurssiin liittyvä suomeksi (määrittelydokumentti, viikkoraportit) ja kaikki projektiin liittyvä tieto englanniksi (tuntikirjanpito, readme, docstring...)
 
 
 
