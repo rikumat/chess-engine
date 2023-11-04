@@ -9,3 +9,4 @@ Perhaps the most troublesome thing as of yet is how to store legal moves such th
 ## Next steps
 The next step in the project is to create the ability to keep track of legal moves when the game progresses. After this, initial heuristic function will be created to calculate how favorable a position is for the player. Then, minimax algorithm will be implemented. Finally, the focus will be moved to improving the heuristic function.
 
+### Hours used: 3
