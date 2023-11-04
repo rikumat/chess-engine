@@ -1,11 +1,11 @@
-# Viikko 1
+# Week 1
 
-## Viikon edistys
-Loin alustavan github-projektin, sekä suunnitelman projektin toteuttamiselle. Suunnittelin etukäteen, Miten tulen toteuttamaan laillisten siirtojen kirjaamisen. Tämä tulee toteutumaan jokaisen siirron yhteydessä. Aloitin myös projektin aiheen opiskelun katsomalla videoita minimax-algoritmin ja alpha-beta karsinnan toiminnasta. Katsoin myös opetusvideon shakkipelin luomisesta pythonilla. Tällä viikolla käytin opiskeluun ja dokumentaation luomiseen noin 3 tuntia.
+## Weekly progress
+This week I created the initial github-project, and planned how the project will be implemented. I studied minimax-algorithm and alpha-beta pruning by watching videos on youtube. I also watched an instructional video about how to create a chess engine in python. I created a plan for how legal moves will be calculated (moves updated after every move).
 
-## Epäselvät asiat
-Projektin kannalta haastavin ja epäselvin asia on tällä hetkellä laillisten siirtojen päivittäminen. Alustava suunnitelma on alustaa mustan ja valkoisen lailliset siirrot esimerkiksi joukkoon tupleina. Jokaisen siirron yhteydessä tarkistetaan mihin nappuloihin siirto vaikuttaa, ja päivittää lailliset siirrot näiden nappuloiden osalta. En kuitenkaan vielä ole keksinyt, miten poistan tehokkaasti jo olemassa olevia siirtoja, jos esimerkiksi nappula siirretään toisen nappulan eteen.
+## Unclear and troubling things
+Perhaps the most troublesome thing as of yet is how to store legal moves such that they can be removed efficiently when they are no longer legal. The initial plan for keeping track of legal moves is to start with initial state (pawns and knights can move) and update them every time a piece is moved for all affected pieces.
 
-## Seuraavat vaiheet
-Projektin ensimmäinen askel on luoda kyky päivittää lailliset siirrot nappulan siirron yhteydessä. Tämän jälkeen luodaan yksinkertainen heuristiikka, jonka avulla arvioidaan kuinka suotuisa pelitilanne on pelaajalle. Tämän jälkeen luodaan minimax algoritmi alpha-beta karsinnalla, jonka jälkeen keskitytään heuristiikan parantamiseen.
+## Next steps
+The next step in the project is to create the ability to keep track of legal moves when the game progresses. After this, initial heuristic function will be created to calculate how favorable a position is for the player. Then, minimax algorithm will be implemented. Finally, the focus will be moved to improving the heuristic function.
 
