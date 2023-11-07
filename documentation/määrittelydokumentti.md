@@ -13,7 +13,7 @@ projekti toteutetaan komentorivikäyttöliittymällä, jolle käyttäjä voi sy�
 
 Ongelma, jonka projekti haluaa ratkaista, on hyvän siirron keksiminen shakkipelin jokaisessa vaiheessa. Valitsin minimax-algoritmin, koska se on suhteellisen yksinkertainen totetutaa, ja soveltuu shakkitekoälyn kehittämiseen kohtalaisen hyvin etenkin, jos neuroverkkoja ei voi käyttää. Alpha-beta karsinta soveltuu tämän algoritmin tehostamiseen, ja on välttämätön jos liikkeitä haluaa laskea jokseenkin järkevässä ajassa kolmea siirtoa pidemmälle. 
 
-Siirron laskemiseksi aikavaativuus on O(30^n) ja tilavaativuus O(n), missä n on eteenpäin laskettavien siirtojen lukumäärä. 30 on keskiarvo laillisten siirtojen lukumäärälle satunnaisessa pelitilanteessa.
+Siirron laskemiseksi aikavaativuus on O(30^n) ja tilavaativuus O(30n), missä n on eteenpäin laskettavien siirtojen lukumäärä. 30 on keskiarvo laillisten siirtojen lukumäärälle satunnaisessa pelitilanteessa.
 
 ## Lisätietoja
 - opinto-ohjelma tietojenkäsittelytieteen kandidaatti (TKT)
