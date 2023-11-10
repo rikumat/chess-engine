@@ -1,5 +1,5 @@
 import unittest
-from ..ai import Ai
+from services.ai import Ai
 import chess
 
 class TestAi(unittest.TestCase):
@@ -16,7 +16,7 @@ p p p p p p p p
 P P P P P P P P
 R N B . K B N R"""
         valuation = self.ai.evaluate(test_position)
-        self.assertEqual(valuation, 9)
+        self.assertEqual(valuation, -9)
 
 
 

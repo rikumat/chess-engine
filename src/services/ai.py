@@ -31,9 +31,6 @@ class Ai():
         for i in board:
             value+=values[i]
 
-        if value != 0:
-            print(value)
-
         return value
 
     def calculate_move(self, board):
@@ -43,7 +40,6 @@ class Ai():
         return move
 
     def alphabeta(self, board: chess.Board, alpha, beta, depth, maximizing):
-        print("______")
         """
         This function uses minimax algorithm with alpha beta pruning to calculate the best possible move
         from a given chessboard.

@@ -1,5 +1,5 @@
 import unittest
-from ..engine import Engine
+from services.engine import Engine
 import chess
 
 class TestEngine(unittest.TestCase):
