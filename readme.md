@@ -24,3 +24,5 @@ poetry run invoke test
 For instructios on how to play the game, see [Manual](./documentation/manual.md)
 
 ### [Weekly reports](./documentation/viikkoraportit)
+
+
