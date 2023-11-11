@@ -27,4 +27,5 @@ For instructios on how to play the game, see [Manual](./documentation/manual.md)
 
 ![example workflow](https://github.com/rikumat/chess-engine/workflows/CI/badge.svg)
 
+[![codecov](https://codecov.io/gh/rikumat/chess-engine/graph/badge.svg?token=79OMT6GWXF)](https://codecov.io/gh/rikumat/chess-engine)
 
