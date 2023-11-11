@@ -16,5 +16,5 @@ Next step is to improve heuristics for move generation. The plan is to include t
 - controlled squares
 - weak squares
 
-### Hours used: 3
+### Hours used: 10
 
