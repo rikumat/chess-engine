@@ -7,3 +7,9 @@ def start(c):
 @task
 def test(c):
     c.run("pytest src")
+
+@task
+def coverage_report(c):
+    c.run("coverage run --branch -m pytest src")
+    c.run("coverage html")
+
