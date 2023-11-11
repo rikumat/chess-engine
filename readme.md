@@ -25,4 +25,5 @@ For instructios on how to play the game, see [Manual](./documentation/manual.md)
 
 ### [Weekly reports](./documentation/viikkoraportit)
 
+![example workflow](https://github.com/rikumat/chess-engine/workflows/main/badge.svg)
 
