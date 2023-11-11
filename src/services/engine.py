@@ -24,8 +24,3 @@ class Engine():
 
     def get_board(self):
         return self.board
-
-
-
-    
-

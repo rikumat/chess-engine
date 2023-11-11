@@ -1,6 +1,8 @@
+import chess
+
 from services.engine import Engine
 from services.ai import Ai
-import chess
+
 board = chess.Board()
 chess_engine = Engine(board)
 ai = Ai()
@@ -12,7 +14,7 @@ while True:
         break
     result = chess_engine.make_move(move)
 
-    if result==True:
+    if result is True:
         ai_move = ai.calculate_move(chess_engine.get_board())
         print(ai_move.uci())
         chess_engine.make_move(ai_move.uci())
@@ -20,11 +22,3 @@ while True:
 
     else:
         print(result)
-
-
-
-
-    
-    
-
-

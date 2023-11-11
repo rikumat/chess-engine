@@ -1,5 +1,6 @@
-import chess
 from copy import deepcopy
+import chess
+
 values = {
     ".":0,
     "k": -10**20,
@@ -24,7 +25,8 @@ class Ai():
 
     def evaluate(self, board:str):
         """
-        This function numerically evaluates a chess board. Positive valuation means advantage for white,
+        This function numerically evaluates a chess board. 
+        Positive valuation means advantage for white,
         negative means advantage for black.
         """
         value = 0
@@ -41,7 +43,8 @@ class Ai():
 
     def alphabeta(self, board: chess.Board, alpha, beta, depth, maximizing):
         """
-        This function uses minimax algorithm with alpha beta pruning to calculate the best possible move
+        This function uses minimax algorithm with alpha beta pruning
+        to calculate the best possible move
         from a given chessboard.
         """
 
@@ -66,29 +69,20 @@ class Ai():
 
             return max_eval, best_move
 
-        else:
-            min_eval = 10**15
-            best_move=None
-            for move in board.legal_moves:
-                new_board = deepcopy(board)
-                new_board.push(move)
+        min_eval = 10**15
+        best_move=None
+        for move in board.legal_moves:
+            new_board = deepcopy(board)
+            new_board.push(move)
 
-                evaluation, next_move = self.alphabeta(new_board, alpha, beta, depth-1, True)
-                beta = min(beta, evaluation)
+            evaluation, next_move = self.alphabeta(new_board, alpha, beta, depth-1, True)
+            beta = min(beta, evaluation)
 
-                if evaluation < min_eval:
-                    best_move=move
+            if evaluation < min_eval:
+                best_move=move
 
-                min_eval = min(min_eval, evaluation)
-                if beta <= alpha:
-                    break
+            min_eval = min(min_eval, evaluation)
+            if beta <= alpha:
+                break
 
-            return min_eval, best_move
-
-  
-
-
-
-
-
-
+        return min_eval, best_move
