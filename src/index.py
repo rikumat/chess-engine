@@ -15,7 +15,7 @@ while True:
     result = chess_engine.make_move(move)
 
     if result is True:
-        ai_move = ai.calculate_move(chess_engine.get_board())
+        ai_move = ai.calculate_move(chess_engine.get_board(), False)
         print(ai_move.uci())
         chess_engine.make_move(ai_move.uci())
         print(chess_engine.get_board())
