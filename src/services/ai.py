@@ -4,18 +4,18 @@ import chess
 
 values = {
     ".":0,
-    "k": -10**20,
-    "q": -90,
-    "r": -50,
-    "n":-30,
-    "b":-30,
-    "p":-10,
-    "K": 10**20,
-    "Q": 90,
-    "R": 50,
-    "N":30,
-    "B":30,
-    "P":10,
+    "k": 10**20,
+    "q": 90,
+    "r": 50,
+    "n": 30,
+    "b": 30,
+    "p": 10,
+    "K": -10**20,
+    "Q": -90,
+    "R": -50,
+    "N": -30,
+    "B": -30,
+    "P": -10,
     " ":0,
     "\n":0,
 }
@@ -54,46 +54,23 @@ class Ai():
         Positive valuation means advantage for white,
         negative means advantage for black.
         """
-        board = board.replace(" ","").split("\n")
-        value=0
-
-        ai_king = self.square_to_coordinates(game_data["ai_king"])
-        player_king = self.square_to_coordinates(game_data["player_king"])
-
-        player_distance_to_king=0
-        ai_distance_to_king=0
-
-        for i, row in enumerate(board):
-            for j, piece in enumerate(row):
-
-                value+=values[piece]
-
-                if piece.islower() and piece != ".":
-                    ai_distance_to_king+=sqrt((i-player_king[0])**2+(j-player_king[1])**2)
-
-                elif not piece.islower() and piece != ".":
-                    player_distance_to_king+=sqrt((i-ai_king[0])**2+(j-ai_king[1])**2)
-
-        value+=(5/player_distance_to_king)*200
-        value-=(5/ai_distance_to_king)*200
+        value = 0
+        value += game_data["material_balance"]
 
         return value
 
+    def piece_in_square(self, board, square):
+        piece = board.piece_at(letter_to_number[square[0]]+(int(square[1])-1)*8)
+        if piece == None:
+            return "."
+        return piece
+         
     def calculate_move(self, board, white):
-        print(board)
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function."""
         game_data = {}
-        list_board = str(board).replace(" ","").split("\n")
-        for i, row in enumerate(list_board):
-            for j, piece in enumerate(row):
-                if piece=="k":
-                    game_data["ai_king"]=self.coordinates_to_square(i, j)
-                if piece=="K":
-                    game_data["player_king"]=self.coordinates_to_square(i, j)
-
+        game_data["material_balance"]=0
         value, move = self.alphabeta(board, -10**15, 10**15, game_data, 5, white)
-        print(value)
         return move
 
     def alphabeta(self, board: chess.Board, alpha, beta, game_data, depth, maximizing):
@@ -114,9 +91,9 @@ class Ai():
                 new_board.push(move)
 
                 new_data = game_data.copy()
-                if move.uci()[:2]==new_data["player_king"]:
-                    new_data["player_king"]=move.uci()[2:]
-
+                piece_taken = self.piece_in_square(new_board, move.uci()[2:])
+                new_data["material_balance"]+=values[str(piece_taken)]
+                
                 evaluation, next_move = self.alphabeta(new_board, alpha, beta, new_data, depth-1, False)
                 alpha = max(alpha, evaluation)
                 if evaluation>max_eval:
@@ -137,8 +114,7 @@ class Ai():
             new_board.push(move)
 
             new_data = game_data.copy()
-            if move.uci()[:2]==new_data["ai_king"]:
-                new_data["ai_king"]=move.uci()[2:]
+            new_data["material_balance"]+=values[str(self.piece_in_square(new_board, move.uci()[2:]))]
 
             evaluation, next_move, = self.alphabeta(new_board, alpha, beta, new_data, depth-1, True)
             beta = min(beta, evaluation)

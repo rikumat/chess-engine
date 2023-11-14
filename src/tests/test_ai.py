@@ -71,5 +71,8 @@ class TestAi(unittest.TestCase):
         thing = chess.Move.from_uci("h7h8q") in board.legal_moves
         self.assertEqual(thing, True)
 
-
+    def test_piece_in_square_returns_correct_piece(self):
+        board = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        piece = self.ai.piece_in_square(board, "b8")
+        self.assertEqual(piece, "R")
 
