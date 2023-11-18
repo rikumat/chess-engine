@@ -4,7 +4,7 @@ Testing of this program is currently limited to unittests of components. Current
 ## Unittests
 
 ### Ai
-The unittests of this class test, whether the algorithm reacts to selected game states as intended. This includes selecting correct moves in chess puzzles, and detecting checkmates.
+The unittests of this class test, whether the algorithm reacts to selected game states as intended, and selects the correct (best) moves to a given situatiuon. These tests include solving chess puzzles and detecting checkmates.
 
 ### Engine
 
