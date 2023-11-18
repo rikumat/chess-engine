@@ -8,7 +8,7 @@ This week, i added a new heuristic, which gives more points the closer the playe
 ## Unclear and troubling things
 Prevailing problem with the build is that the Ai looks forward x moves and values the position by material advantage and piece development. However, if this sequence ends in a state where the Ai's queen is threatened by a less valued piece, it doesn't affect the evaluation, because it's effect is only seen on the x+1 move. This causes occasional blunders.
 
-* Will i lose signinificantly performance if in the alphabeta function i go through each piece and calculate legal moves for that piece from a 2-dimensional list that represents the chessboard *
+** Will i lose signinificantly performance if in the alphabeta function i go through each piece and calculate legal moves for that piece from a 2-dimensional list that represents the chessboard **
 
 ## Next steps
 The highest priority task for next week is transferring board functionality to a custom class (Board), and pruning the python-chess dependency. After this is done, tested and ensured to work properly, the focus will be moved to improving the heuristic function. The next step to improve the heuristics is to add value to threats.
