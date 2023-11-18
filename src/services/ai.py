@@ -1,6 +1,7 @@
 from copy import deepcopy
 from math import sqrt
 import chess
+import utils
 
 values = {
     ".":0,
@@ -38,16 +39,6 @@ class Ai():
     def __init__(self):
         pass
 
-    def square_to_coordinates(self, square):
-        x=letter_to_number[square[0]]
-        y=8-int(square[1])
-        return (y, x)
-
-    def coordinates_to_square(self, x, y):
-        letter=number_to_letter[y]
-        number=8-x
-        return letter+str(number)
-
     def evaluate(self, board:str, game_data):
         """
         This function numerically evaluates a chess board. 
@@ -57,8 +48,8 @@ class Ai():
         board = board.replace(" ","").split("\n")
         value=0
 
-        ai_king = self.square_to_coordinates(game_data["ai_king"])
-        player_king = self.square_to_coordinates(game_data["player_king"])
+        ai_king = utils.square_to_coordinates(game_data["ai_king"])
+        player_king = utils.square_to_coordinates(game_data["player_king"])
 
         player_distance_to_king=0
         ai_distance_to_king=0
@@ -88,11 +79,11 @@ class Ai():
         for i, row in enumerate(list_board):
             for j, piece in enumerate(row):
                 if piece=="k":
-                    game_data["ai_king"]=self.coordinates_to_square(i, j)
+                    game_data["ai_king"]=utils.coordinates_to_square(i, j)
                 if piece=="K":
-                    game_data["player_king"]=self.coordinates_to_square(i, j)
+                    game_data["player_king"]=utils.coordinates_to_square(i, j)
 
-        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 5, white)
+        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 4, white)
         print(value)
         return move
 
