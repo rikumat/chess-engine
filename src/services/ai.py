@@ -79,9 +79,9 @@ class Ai():
         for i, row in enumerate(list_board):
             for j, piece in enumerate(row):
                 if piece=="k":
-                    game_data["ai_king"]=utils.coordinates_to_square(i, j)
+                    game_data["ai_king"]=utils.coordinates_to_square((i, j))
                 if piece=="K":
-                    game_data["player_king"]=utils.coordinates_to_square(i, j)
+                    game_data["player_king"]=utils.coordinates_to_square((i, j))
 
         value, move = self.alphabeta(board, -10**15, 10**15, game_data, 4, white)
         print(value)
