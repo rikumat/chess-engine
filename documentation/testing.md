@@ -1,5 +1,5 @@
 # Testing
-Testing of this program is currently limited to unittests of components. Currently, there are 2 classes that are tested: Ai, Engine and Board. 
+Testing of this program is currently limited to unittests of components. Currently, there are 2 classes that are tested: Ai, Engine and engine. Additionally, the helper function file utils.py is tested.
 
 ## Unittests
 
