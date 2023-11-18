@@ -17,6 +17,7 @@ p p p p p p p p
 . . . . . . . .
 P P P P P . P P
 R N B Q K B N R"""
+
         valuation=self.ai.evaluate(test_position, {"player_king": "e1", "ai_king": "e8"})
         self.assertGreater(-9, valuation)
         self.assertLess(-10, valuation)
