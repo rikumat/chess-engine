@@ -1,4 +1,4 @@
-# Week 1
+# Week 3
 
 ## Weekly progress
 This week my main focus was fixing the main problem of the previous build - always losing by repetition. Last week the only heuristic the bot used was material balance. Consequently, if the bot didn't see an assured advantage in material within the next 5 moves, it considered all moves equally good. This caused it to move a rook back and forth until the game ends in a draw by repetition, or the opponent manages to win the game.
