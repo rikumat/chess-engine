@@ -138,5 +138,24 @@ class TestBoard(unittest.TestCase):
             ["P", "P", "P", "P", ".", "P", "P", "P"],
             ["R", "N", "B", "Q", "K", "B", "N", "R"]
         ]
-        moves = self.board.get_all_moves(test_board, True)
-        self.assertEqual(moves, [])
+        moves = self.board.get_all_moves(test_board, False)
+        self.assertEqual(moves, ['b8a6',
+                                'b8c6',
+                                'g8f6',
+                                'g8h6',
+                                'a7a5',
+                                'a7a6',
+                                'b7b5',
+                                'b7b6',
+                                'c7c5',
+                                'c7c6',
+                                'd7d5',
+                                'd7d6',
+                                'e7e5',
+                                'e7e6',
+                                'f7f5',
+                                'f7f6',
+                                'g7g5',
+                                'g7g6',
+                                'h7h5',
+                                'h7h6'])

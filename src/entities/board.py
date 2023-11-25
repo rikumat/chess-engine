@@ -150,12 +150,16 @@ class Board():
 
         if board[coordinates[0]+1][coordinates[1]]==".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1])))
-        eat_right = board[coordinates[0]+1][coordinates[1]+1]
-        if coordinates[1]+1<=7 and not eat_right.islower() and eat_right!=".":
-            legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
-        eat_left = board[coordinates[0]+1][coordinates[1]-1]
-        if coordinates[1]-1>=0 and not eat_left.islower() and eat_left!=".":
-            legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]-1)))
+
+        if coordinates[1]+1<=7:
+            eat_right = board[coordinates[0]+1][coordinates[1]+1]
+            if not eat_right.islower() and eat_right!=".":
+                legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
+
+        if coordinates[1]-1>=0:
+            eat_left = board[coordinates[0]+1][coordinates[1]-1]
+            if not eat_left.islower() and eat_left!=".":
+                legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]-1)))
         return legal
 
     def get_queen_moves(self, board, square):
