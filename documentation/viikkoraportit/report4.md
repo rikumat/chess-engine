@@ -1,7 +1,7 @@
 # Week 4
 
 ## Weekly progress
-This week i completed creating my own move generator. According to extensive unittests, it should work properly. Consequently, custom move generation is now ready, apart from the integration with the Ai. I decided to leave this to next week as it would pose a stability risk if done during the final hours before the deadline.
+This week i completed creating my own move generator. According to extensive unittests, it should work properly. Consequently, custom move generation is now ready, waiting for integration with the Ai. I decided to leave this to next week as it would pose a stability risk if done during the final hours before the deadline.
 
 ## Unclear and troubling things
 Everything is quite clear right now.
