@@ -133,31 +133,33 @@ class Board():
     def get_pawn_moves(self, board, square):
         coordinates = utils.square_to_coordinates(square)
         legal = []
+
         if not board[coordinates[0]][coordinates[1]].islower():
+            if coordinates[0]==6 and board[5][coordinates[1]]=="." and board[4][coordinates[1]]==".":
+                legal.append(square+utils.coordinates_to_square((4, coordinates[1])))
             if board[coordinates[0]-1][coordinates[1]]==".":
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1])))
-            if board[coordinates[0]-1][coordinates[1]+1].islower():
+            if coordinates[1]+1<=7 and board[coordinates[0]-1][coordinates[1]+1].islower():
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]+1)))
-            if board[coordinates[0]-1][coordinates[1]-1].islower():
+            if coordinates[1]-1>=0 and board[coordinates[0]-1][coordinates[1]-1].islower():
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]-1)))
             return legal
+
+        if coordinates[0]==1 and board[2][coordinates[1]]=="." and board[3][coordinates[1]]==".":
+                legal.append(square+utils.coordinates_to_square((3, coordinates[1])))
 
         if board[coordinates[0]+1][coordinates[1]]==".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1])))
         eat_right = board[coordinates[0]+1][coordinates[1]+1]
-        if not eat_right.islower() and eat_right!=".":
+        if coordinates[1]+1<=7 and not eat_right.islower() and eat_right!=".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
         eat_left = board[coordinates[0]+1][coordinates[1]-1]
-        if not eat_left.islower() and eat_left!=".":
+        if coordinates[1]-1>=0 and not eat_left.islower() and eat_left!=".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]-1)))
         return legal
 
-
     def get_queen_moves(self, board, square):
-        pass
-
-    def get_rook_moves(self, board, square):
-        pass
+        return self.get_diagonal_moves(board, square)+self.get_vertical_and_horizontal_moves(board, square)
 
     def get_knight_moves(self, board, square):
         legal = []
@@ -175,10 +177,6 @@ class Board():
                 if taken=="." or taken.islower() != current.islower():
                     legal.append(square+utils.coordinates_to_square(move))
         return legal
-    
-
-    def get_bishop_moves(self, board, square):
-        pass
 
     def get_king_moves(self, board, square):
         legal=[]
@@ -196,3 +194,20 @@ class Board():
 
         return legal
 
+    def get_all_moves(self, board, is_white):
+        functions = {
+            "q": self.get_queen_moves,
+            "k": self.get_king_moves,
+            "r": self.get_vertical_and_horizontal_moves,
+            "n": self.get_knight_moves,
+            "b": self.get_diagonal_moves,
+            "p": self.get_pawn_moves,
+        }
+        moves = []
+        for i, row in enumerate(board):
+            for j, piece in enumerate(row):
+                if is_white and not piece.islower() and piece!=".":
+                    moves += functions[piece.lower()](board, utils.coordinates_to_square((i, j)))
+                if not is_white and piece.islower() and piece!=".":
+                    moves+=functions[piece](board, utils.coordinates_to_square((i, j)))
+        return moves

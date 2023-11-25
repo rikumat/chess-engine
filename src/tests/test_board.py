@@ -127,4 +127,16 @@ class TestBoard(unittest.TestCase):
         moves = self.board.get_king_moves(test_board, "f3")
         self.assertCountEqual(moves, ['f3g2', 'f3e2', 'f3g4', 'f3e4'])
 
-
+    def test_get_all_moves_returns_all_moves(self):
+        test_board = [
+            ["r", "n", "b", "q", "k", "b", "n", "r"],
+            ["p", "p", "p", "p", "p", "p", "p", "p"],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", "P", ".", ".", "."],
+            ["P", "P", "P", "P", ".", "P", "P", "P"],
+            ["R", "N", "B", "Q", "K", "B", "N", "R"]
+        ]
+        moves = self.board.get_all_moves(test_board, True)
+        self.assertEqual(moves, [])
