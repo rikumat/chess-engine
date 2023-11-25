@@ -12,4 +12,6 @@ This class is responsible for keeping track of the game state, and verifying the
 ### Ai
 This class is responsible for calculating a move in response to the user's move.
 
+## Utils
 
+Utils is a file of utility functions. Currently there are 2 functions in this file: coordinates_to_square and square_to_coordinates, which help converting chess moves to coordinates that can be used to access the matrix that represents the chess board.
