@@ -199,6 +199,9 @@ class Board():
         return legal
 
     def get_all_moves(self, board, is_white):
+        """
+        finds and returns all legal moves of given player on a given board.
+        """
         functions = {
             "q": self.get_queen_moves,
             "k": self.get_king_moves,
