@@ -1,7 +1,7 @@
 # Implementation
 
 ## Classes
-This project is divided into 3 mutually independent classes: Ai, Board and Engine.
+This project is divided into 3 classes: Ai, Board and Engine.
 
 ### Board
 This class is responsible for generating legal moves. an Instance of this class will be injected to the Ai class in the future.
