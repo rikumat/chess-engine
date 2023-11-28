@@ -1,5 +1,13 @@
 import utils
 
+move_priority = {
+    "p": 15,
+    "n":10,
+    "b": 10,
+    "r":5,
+    "q":0,
+    "k":-10
+}
 
 class Board():
     def __init__(self):
@@ -210,6 +218,21 @@ class Board():
             "b": self.get_diagonal_moves,
             "p": self.get_pawn_moves,
         }
+        def alphabeta_ordering(first):
+            first_points=0
+            first_end = utils.square_to_coordinates(first[2:])
+            first_start = utils.square_to_coordinates(first[:2])
+
+            if board[first_end[0]][first_end[1]]!=".":
+                first_points+=50
+            
+            if first_start[0]<first_end[1]:
+                first_points += 10
+            first_points+=move_priority[board[first_start[0]][first_start[1]]]
+
+            return -first_points
+
+
         moves = []
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
@@ -217,4 +240,5 @@ class Board():
                     moves += functions[piece.lower()](board, utils.coordinates_to_square((i, j)))
                 if not is_white and piece.islower() and piece!=".":
                     moves+=functions[piece](board, utils.coordinates_to_square((i, j)))
+        moves.sort(key=alphabeta_ordering)
         return moves

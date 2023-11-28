@@ -159,3 +159,12 @@ class TestBoard(unittest.TestCase):
                                 'g7g6',
                                 'h7h5',
                                 'h7h6'])
+    def test_get_moves_orders_moves_correctly(self):
+        test_board = copy.deepcopy(empty_board)
+        test_board[5][5]="p"
+        test_board[5][4]="n"
+        test_board[5][7]="k"
+        test_board[5][6]="P"
+
+        moves = self.board.get_all_moves(test_board, False)
+        self.assertEqual(moves, [])
