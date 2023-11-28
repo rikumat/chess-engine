@@ -1,26 +1,36 @@
 import chess
-
+import utils
 class Engine():
     """This class is responsible for keeping the state of the game."""
-    def __init__(self, board: chess.Board):
+    def __init__(self):
+
         """
         self.board: the current situation on chess board.
         """
-        self.board=board
+        self.board = [
+            ["r", "n", "b", "q", "k", "b", "n", "r"],
+            ["p", "p", "p", "p", "p", "p", "p", "p"],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            ["P", "P", "P", "P", "P", "P", "P", "P"],
+            ["R", "N", "B", "Q", "K", "B", "N", "R"]
+        ]
 
-    def make_move(self, uci):
+    def make_move(self, move):
         """
         This function takes a move as an argument, and updates self.board.
         """
-        try:
-            move = chess.Move.from_uci(uci)
-            if move in self.board.legal_moves:
-                self.board.push(move)
-                return True
-            else:
-                return "Illegal move"
-        except chess.InvalidMoveError:
+
+        if len(move)!=4:
             return "Invalid move"
 
-    def get_board(self):
-        return self.board
+        start = utils.square_to_coordinates(move[:2])
+        end=utils.square_to_coordinates(move[2:])
+
+        self.board[end[0]][end[1]]=self.board[start[0]][start[1]]
+        self.board[start[0]][start[1]]="."
+
+        return True
+

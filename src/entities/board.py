@@ -9,6 +9,16 @@ move_priority = {
     "k":-10
 }
 
+values = {
+    "k": 10**20,
+    "q": 90,
+    "r": 50,
+    "n":30,
+    "b":30,
+    "p":10,
+    ".":0
+}
+
 class Board():
     def __init__(self):
         self.initial_board = [
@@ -54,7 +64,6 @@ class Board():
                 break
         
         for i in range(coordinates[1]-1, -1, -1):
-            print("yks")
             taken_piece = board[coordinates[0]][i]
             if (taken_piece.islower() == current_piece.islower() and taken_piece !="."):
                 break
@@ -219,16 +228,16 @@ class Board():
             "p": self.get_pawn_moves,
         }
         def alphabeta_ordering(first):
+
             first_points=0
             first_end = utils.square_to_coordinates(first[2:])
             first_start = utils.square_to_coordinates(first[:2])
 
-            if board[first_end[0]][first_end[1]]!=".":
-                first_points+=50
+            first_points+=values[board[first_end[0]][first_end[1]].lower()]*10
             
             if first_start[0]<first_end[1]:
-                first_points += 10
-            first_points+=move_priority[board[first_start[0]][first_start[1]]]
+                first_points += 100
+            first_points+=move_priority[board[first_start[0]][first_start[1]].lower()]
 
             return -first_points
 

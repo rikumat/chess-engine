@@ -4,10 +4,10 @@ from services.engine import Engine
 from services.ai import Ai
 
 board = chess.Board()
-chess_engine = Engine(board)
+chess_engine = Engine()
 ai = Ai()
 
-print(chess_engine.get_board())
+print(chess_engine.board)
 while True:
     move = input("Enter your move ")
     if move == "quit":
@@ -15,10 +15,10 @@ while True:
     result = chess_engine.make_move(move)
 
     if result is True:
-        ai_move = ai.calculate_move(chess_engine.get_board(), False)
-        print(ai_move.uci())
-        chess_engine.make_move(ai_move.uci())
-        print(chess_engine.get_board())
+        ai_move = ai.calculate_move(chess_engine.board, False)
+        print(ai_move)
+        chess_engine.make_move(ai_move)
+        print(chess_engine.board)
 
     else:
         print(result)

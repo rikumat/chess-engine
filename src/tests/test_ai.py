@@ -2,7 +2,16 @@ import unittest
 import chess
 from services.ai import Ai
 
-
+empty_board = [
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."]
+        ]
 
 class TestAi(unittest.TestCase):
     def setUp(self):
@@ -24,13 +33,33 @@ R N B Q K B N R"""
 
     def test_ai_notices_easy_checkmate(self):
         board = chess.Board("4qk2/8/8/8/8/8/PP5R/K7 b KQkq - 0 1")
-        move = self.ai.calculate_move(board, True)
-        self.assertEqual(move.uci(), "e8e1")
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            ["p", "p", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", "P", "P", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            ["K", ".", ".", ".", "Q", ".", ".", "."]
+        ]
+        move = self.ai.calculate_move(test_board, True)
+        self.assertEqual(move, "e1e8")
 
     def test_ai_notices_medium_checkmate(self):
-        board = chess.Board("r1bq2r1/b4pk1/p1pp1p2/1p2pP2/1P2P1PB/3P4/1PPQ2P1/R3K2R w")
-        move = self.ai.calculate_move(board, True)
-        self.assertEqual(move.uci(), "d2h6")
+        #r1bq2r1/b4pk1/p1pp1p2/1p2pP2/1P2P1PB/3P4/1PPQ2P1/R3K2R w
+        test_board = [
+            ["r", ".", "b", "q", ".", ".", "r", "."],
+            ["b", ".", ".", ".", ".", "p", "k", "."],
+            ["p", ".", "p", "p", ".", "p", ".", "."],
+            [".", "p", ".", ".", "p", "P", ".", "."],
+            [".", "P", ".", ".", "P", ".", "P", "B"],
+            [".", ".", ".", "P", ".", ".", ".", "."],
+            [".", "P", "P", "Q", ".", ".", "P", "."],
+            ["R", ".", ".", ".", ".", "K", ".", "R"]
+        ]
+        move = self.ai.calculate_move(test_board, True)
+        self.assertEqual(move, "d2h6")
 
     def test_ai_can_solve_puzzle_1(self):
         board = chess.Board("2r3k1/p4p2/3Rp2p/1p2P1pK/8/1P4P1/P3Q2P/1q6 b - - 0 1")

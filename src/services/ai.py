@@ -1,7 +1,10 @@
+from entities.board import Board
 from copy import deepcopy
 from math import sqrt
 import chess
 import utils
+
+generator = Board()
 
 values = {
     ".":0,
@@ -39,13 +42,12 @@ class Ai():
     def __init__(self):
         pass
 
-    def evaluate(self, board:str, game_data):
+    def evaluate(self, board, game_data):
         """
         This function numerically evaluates a chess board. 
         Positive valuation means advantage for white,
         negative means advantage for black.
         """
-        board = board.replace(" ","").split("\n")
         value=0
 
         ai_king = utils.square_to_coordinates(game_data["ai_king"])
@@ -65,8 +67,8 @@ class Ai():
                 elif not piece.islower() and piece != ".":
                     player_distance_to_king+=sqrt((i-ai_king[0])**2+(j-ai_king[1])**2)
 
-        value+=(5/player_distance_to_king)*200
-        value-=(5/ai_distance_to_king)*200
+        value+=(5/player_distance_to_king)*10
+        value-=(5/ai_distance_to_king)*10
 
         return value
 
@@ -75,19 +77,18 @@ class Ai():
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function."""
         game_data = {}
-        list_board = str(board).replace(" ","").split("\n")
-        for i, row in enumerate(list_board):
+        for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if piece=="k":
                     game_data["ai_king"]=utils.coordinates_to_square((i, j))
                 if piece=="K":
                     game_data["player_king"]=utils.coordinates_to_square((i, j))
 
-        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 4, white)
+        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 5, white)
         print(value)
         return move
 
-    def alphabeta(self, board: chess.Board, alpha, beta, game_data, depth, maximizing):
+    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing):
         """
         This function uses minimax algorithm with alpha beta pruning
         to calculate the best possible move
@@ -95,20 +96,29 @@ class Ai():
         """
 
         if depth==0:
-            return self.evaluate(str(board), game_data), None
+            return self.evaluate(board, game_data), None
 
         if maximizing:
             best_move=None
             max_eval=-10**15
-            for move in board.legal_moves:
-                new_board = deepcopy(board)
-                new_board.push(move)
+            for move in generator.get_all_moves(board, True):
+
+                coords_start = utils.square_to_coordinates(move[:2])
+                coords_end = utils.square_to_coordinates(move[2:])
+                piece_taken = board[coords_end[0]][coords_end[1]]
+
+                board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
+                board[coords_start[0]][coords_start[1]]="."
 
                 new_data = game_data.copy()
-                if move.uci()[:2]==new_data["player_king"]:
-                    new_data["player_king"]=move.uci()[2:]
+                if move[:2]==new_data["player_king"]:
+                    new_data["player_king"]=move[2:]
 
-                evaluation, next_move = self.alphabeta(new_board, alpha, beta, new_data, depth-1, False)
+                evaluation, next_move = self.alphabeta(board, alpha, beta, new_data, depth-1, False)
+
+                board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
+                board[coords_end[0]][coords_end[1]]=piece_taken
+
                 alpha = max(alpha, evaluation)
                 if evaluation>max_eval:
                     best_move=move
@@ -123,15 +133,25 @@ class Ai():
         min_eval = 10**15
         best_move=None
 
-        for move in board.legal_moves:
-            new_board = deepcopy(board)
-            new_board.push(move)
+        for move in generator.get_all_moves(board, False):
+
+            coords_start = utils.square_to_coordinates(move[:2])
+            coords_end = utils.square_to_coordinates(move[2:])
+
+            piece_taken = board[coords_end[0]][coords_end[1]]
+
+            board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
+            board[coords_start[0]][coords_start[1]]="."
 
             new_data = game_data.copy()
-            if move.uci()[:2]==new_data["ai_king"]:
-                new_data["ai_king"]=move.uci()[2:]
+            if move[:2]==new_data["ai_king"]:
+                new_data["ai_king"]=move[2:]
 
-            evaluation, next_move, = self.alphabeta(new_board, alpha, beta, new_data, depth-1, True)
+            evaluation, next_move, = self.alphabeta(board, alpha, beta, new_data, depth-1, True)
+
+            board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
+            board[coords_end[0]][coords_end[1]]=piece_taken
+
             beta = min(beta, evaluation)
 
             if evaluation < min_eval:
