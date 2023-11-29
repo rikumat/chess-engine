@@ -19,6 +19,16 @@ values = {
     ".":0
 }
 
+list_indexes = {
+    "k":0,
+    "q":1,
+    "r":2,
+    "n":3,
+    "b":4,
+    "p":5,
+    ".":6
+}
+
 class Board():
     def __init__(self):
         self.initial_board = [
@@ -31,6 +41,8 @@ class Board():
             ["P", "P", "P", "P", "P", "P", "P", "P"],
             ["R", "N", "B", "Q", "K", "B", "N", "R"]
         ]
+        self.moves = [[], [], [], [], [], [], []]
+
     def coordinates_valid(self, coordinates):
         return coordinates[0]<=7 and coordinates[0]>=0 and coordinates[1]<=7 and coordinates[1]>=0
 
@@ -49,6 +61,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square((i, coordinates[1])))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((i, coordinates[1])))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -59,6 +72,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square((i, coordinates[1])))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((i, coordinates[1])))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -69,6 +83,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square((coordinates[0], i)))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((coordinates[0], i)))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -79,6 +94,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square((coordinates[0], i)))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((coordinates[0], i)))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -106,6 +122,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square(legal_coordinate))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square(legal_coordinate))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -117,6 +134,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square(legal_coordinate))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square(legal_coordinate))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -129,6 +147,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square(legal_coordinate))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square(legal_coordinate))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -141,6 +160,7 @@ class Board():
                 break
 
             legal.append(square+utils.coordinates_to_square(legal_coordinate))
+            self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square(legal_coordinate))
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
@@ -153,30 +173,46 @@ class Board():
 
         if not board[coordinates[0]][coordinates[1]].islower():
             if coordinates[0]==6 and board[5][coordinates[1]]=="." and board[4][coordinates[1]]==".":
+
                 legal.append(square+utils.coordinates_to_square((4, coordinates[1])))
+                self.moves[6].append(square+utils.coordinates_to_square((4, coordinates[1])))
+
             if board[coordinates[0]-1][coordinates[1]]==".":
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1])))
+                self.moves[6].append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1])))
+
             if coordinates[1]+1<=7 and board[coordinates[0]-1][coordinates[1]+1].islower():
+                taken_piece = board[coordinates[0]-1][coordinates[1]+1]
+
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]+1)))
+                self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]+1)))
+
             if coordinates[1]-1>=0 and board[coordinates[0]-1][coordinates[1]-1].islower():
+                taken_piece = board[coordinates[0]-1][coordinates[1]-1]
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]-1)))
+                self.moves[list_indexes[taken_piece.lower()]].append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]-1)))
+
             return legal
 
         if coordinates[0]==1 and board[2][coordinates[1]]=="." and board[3][coordinates[1]]==".":
                 legal.append(square+utils.coordinates_to_square((3, coordinates[1])))
+                self.moves[6].append(square+utils.coordinates_to_square((3, coordinates[1])))
 
         if board[coordinates[0]+1][coordinates[1]]==".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1])))
+            self.moves[6].append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1])))
 
         if coordinates[1]+1<=7:
             eat_right = board[coordinates[0]+1][coordinates[1]+1]
             if not eat_right.islower() and eat_right!=".":
                 legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
+                self.moves[list_indexes[eat_right.lower()]].append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
 
         if coordinates[1]-1>=0:
             eat_left = board[coordinates[0]+1][coordinates[1]-1]
             if not eat_left.islower() and eat_left!=".":
                 legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]-1)))
+                self.moves[list_indexes[eat_left.lower()]].append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]-1)))
         return legal
 
     def get_queen_moves(self, board, square):
@@ -195,6 +231,7 @@ class Board():
                         taken = board[move[0]][move[1]]
                         if taken=="." or taken.islower() != current.islower():
                             legal.append(square+utils.coordinates_to_square(move))
+                            self.moves[list_indexes[taken.lower()]].append(square+utils.coordinates_to_square(move))
         return legal
 
     def get_king_moves(self, board, square):
@@ -210,6 +247,7 @@ class Board():
                     target = board[coordinates[0]+i][coordinates[1]+j]
                     if target=="." or current.islower() != target.islower():
                         legal.append(square+utils.coordinates_to_square(target_coordinates))
+                        self.moves[list_indexes[target.lower()]].append(square+utils.coordinates_to_square(target_coordinates))
 
         return legal
 
@@ -217,6 +255,7 @@ class Board():
         """
         finds and returns all legal moves of given player on a given board.
         """
+        self.moves = [[], [], [], [], [], [], []]
         functions = {
             "q": self.get_queen_moves,
             "k": self.get_king_moves,
@@ -225,24 +264,14 @@ class Board():
             "b": self.get_diagonal_moves,
             "p": self.get_pawn_moves,
         }
-        def alphabeta_ordering(first):
-
-            first_points=0
-            first_end = utils.square_to_coordinates(first[2:])
-            first_start=utils.square_to_coordinates(first[:2])
-
-            first_points+=values[board[first_end[0]][first_end[1]].lower()]
-
-            return -first_points
-
-        moves = []
+        moves=[]
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if piece==".":
                     continue
                 if is_white and not piece.islower() and piece!=".":
-                    moves += functions[piece.lower()](board, utils.coordinates_to_square((i, j)))
+                    functions[piece.lower()](board, utils.coordinates_to_square((i, j)))
                 if not is_white and piece.islower() and piece!=".":
-                    moves+=functions[piece](board, utils.coordinates_to_square((i, j)))
-        moves.sort(key=alphabeta_ordering)
-        return moves
+                    functions[piece](board, utils.coordinates_to_square((i, j)))
+        return self.moves
+    
