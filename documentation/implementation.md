@@ -32,7 +32,7 @@ Index ->> Engine: engine.make_move("e2e4")
 Engine -->> Index: True
 Index ->> Ai: Ai.calculate_move(board matrix, False)
 loop on every recursive Alphabeta call
-  Ai ->> Board: Board.get_all_moves(board, False)
+  Ai ->> Board: Board.get_moves_from_board(board, False)
   Board -->> Ai: list of moves
     end
 Ai -->> Index: "b8c6"

@@ -184,19 +184,17 @@ class Board():
 
     def get_knight_moves(self, board, square):
         legal = []
-        moves = []
         coordinates = utils.square_to_coordinates(square)
         current = board[coordinates[0]][coordinates[1]]
         for i in [-1, 1]:
             for j in [-1, 1]:
-                moves.append((coordinates[0]+2*i, coordinates[1]+j))
-                moves.append((coordinates[0]+j, coordinates[1]+2*i))
-
-        for move in moves:
-            if self.coordinates_valid(move):
-                taken = board[move[0]][move[1]]
-                if taken=="." or taken.islower() != current.islower():
-                    legal.append(square+utils.coordinates_to_square(move))
+                coordinate1 = (coordinates[0]+2*i, coordinates[1]+j)
+                coordinate2 = (coordinates[0]+j, coordinates[1]+2*i)
+                for move in [coordinate1, coordinate2]:
+                    if self.coordinates_valid(move):
+                        taken = board[move[0]][move[1]]
+                        if taken=="." or taken.islower() != current.islower():
+                            legal.append(square+utils.coordinates_to_square(move))
         return legal
 
     def get_king_moves(self, board, square):
@@ -215,7 +213,7 @@ class Board():
 
         return legal
 
-    def get_all_moves(self, board, is_white):
+    def get_moves_from_board(self, board, is_white):
         """
         finds and returns all legal moves of given player on a given board.
         """
@@ -231,20 +229,17 @@ class Board():
 
             first_points=0
             first_end = utils.square_to_coordinates(first[2:])
-            first_start = utils.square_to_coordinates(first[:2])
+            first_start=utils.square_to_coordinates(first[:2])
 
-            first_points+=values[board[first_end[0]][first_end[1]].lower()]*10
-            
-            if first_start[0]<first_end[1]:
-                first_points += 100
-            first_points+=move_priority[board[first_start[0]][first_start[1]].lower()]
+            first_points+=values[board[first_end[0]][first_end[1]].lower()]
 
             return -first_points
-
 
         moves = []
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
+                if piece==".":
+                    continue
                 if is_white and not piece.islower() and piece!=".":
                     moves += functions[piece.lower()](board, utils.coordinates_to_square((i, j)))
                 if not is_white and piece.islower() and piece!=".":
