@@ -1,12 +1,14 @@
-# Week 1
+# Week 5
 
 ## Weekly progress
-This week I created the initial github-project, and planned how the project will be implemented. I studied minimax-algorithm and alpha-beta pruning by watching videos on youtube. I also watched an instructional video about how to create a chess engine in python. I created a plan for how legal moves will be calculated (moves updated after every move).
+Significant improvements in both memory- and computation-efficiency. This week i integrated custom move generator with my Ai, removed looping in evaluation function, and transitioned from copying previous game state to undoing changes after recursive call. I added move ordering (order by eating most valuable piece first). Now it is feasible to calculate 7 moves forward (10-15 seconds) as opposed to last week's 5.
 
 ## Unclear and troubling things
-Perhaps the most troublesome thing as of yet is how to store legal moves such that they can be removed efficiently when they are no longer legal. The initial plan for keeping track of legal moves is to start with initial state (pawns and knights can move) and update them every time a piece is moved for all affected pieces.
+What should happen when the Ai notices it's losing in mate in 7? How is the best move selected when all moves result in a checkmate? If this happens should i return best move from smaller depth until the mate is no longer detected, or should i change expectation and hope the player doesn't move optimally?
+
+How can i gain slightly efficiency to make the game comfortable with depth 7 minimax?
 
 ## Next steps
-The next step in the project is to create the ability to keep track of legal moves when the game progresses. After this, initial heuristic function will be created to calculate how favorable a position is for the player. Then, minimax algorithm will be implemented. Finally, the focus will be moved to improving the heuristic function.
+The next step is to consider endgames. Ensure the game ends without a crash, based on the earlier problem. After this, allow castling and pawn promotion initialy to queen only. Finally, consider improvements to user experience.
 
-### Hours used: 3
+### Hours used: 10
