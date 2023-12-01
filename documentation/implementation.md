@@ -38,3 +38,11 @@ loop on every recursive Alphabeta call
 Ai -->> Index: "b8c6"
 Index -->> User: output b8c6
   ```
+
+## Package diagram
+```mermaid
+classDiagram
+  Index<|-- Ai
+  Ai <|-- Board
+  Index <|-- Engine
+  ```
