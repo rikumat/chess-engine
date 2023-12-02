@@ -89,6 +89,7 @@ class Ai():
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
         game_data["game_over"]=False
+        game_data["winner"]=0
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if piece=="k":
@@ -106,6 +107,9 @@ class Ai():
         to calculate the best possible move
         from a given chessboard.
         """
+        if game_data["winner"] != 0:
+            return game_data["winner"]*10**10+game_data["winner"]*depth, None
+    
 
         if depth==0:
             return self.evaluate(board, game_data), None
@@ -121,7 +125,7 @@ class Ai():
                     coords_end = utils.square_to_coordinates(move[2:])
                     piece_taken = board[coords_end[0]][coords_end[1]]
                     if piece_taken=="k":
-                        return 10**10, None
+                        game_data["winner"]=1
                     board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                     board[coords_start[0]][coords_start[1]]="."
 
@@ -131,7 +135,7 @@ class Ai():
                         game_data["player_king"]=move[2:]
 
                     evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False)
-
+                    game_data["winner"]=0
                     game_data["game_over"]=False
                     game_data["balance"]+=values[piece_taken]
 
@@ -162,7 +166,7 @@ class Ai():
                 piece_taken = board[coords_end[0]][coords_end[1]]
 
                 if piece_taken=="K":
-                    return -10**10, None
+                    game_data["winner"]=-1
 
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
@@ -173,6 +177,7 @@ class Ai():
 
                 evaluation, next_move, = self.alphabeta(board, alpha, beta, game_data, depth-1, True)
 
+                game_data["winner"]=0
                 game_data["balance"]+=values[piece_taken]
 
                 board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
