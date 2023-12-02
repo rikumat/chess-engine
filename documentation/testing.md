@@ -26,5 +26,5 @@ Accuracy tests test the Ai's behaviour in the game. These tests will also includ
 If player plays a standard opening e2e4, the Ai responds with b8c6. If player moves e4e5, the Ai doesn't capture this pawn. Instead it moves g7g6.
 
 ## 2.12.2023 Game against martin (250)
-THe Ai defeated chess.com's Martin bot in 30 moves on 2.12.2023 with depth 7.
+THe Ai defeated chess.com's Martin bot in 30 moves on 2.12.2023 with depth 7, playing black.
 ![alt text](./images/2.12.2023_Martin.png)
