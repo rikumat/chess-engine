@@ -15,8 +15,8 @@ Unittests for this class test that the board gets updated correctly when a move 
 Utils is a utility file containing several helper functions not bound to a class. Currently these functions are limited to square_to_coordinates and coordinates_to_square, which convert a square to index coordinates (y, x) and vice versa. These functions are tested trivially by ensuring they produce the correct conversions.
 
 # Test coverage
-on 25.11.2023 test branch coverage of tested files is 96%.
-![alt text](./images/coverage_25-11-2023.png)
+on 2.12.2023 test branch coverage of tested files is 93%.
+![alt text](./images/coverage_2-12-2023.png)
 
 
 # Accuracy tests
@@ -25,6 +25,6 @@ Accuracy tests test the Ai's behaviour in the game. These tests will also includ
 ## Knight opening blunder (25.11.2023)
 If player plays a standard opening e2e4, the Ai responds with b8c6. If player moves e4e5, the Ai doesn't capture this pawn. Instead it moves g7g6.
 
-## 2.12.2023 Game against martin
+## 2.12.2023 Game against martin (250)
 THe Ai defeated chess.com's Martin bot in 30 moves on 2.12.2023.
-
+![alt text](./images/2.12.2023_Martin.png)
