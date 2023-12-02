@@ -45,4 +45,13 @@ classDiagram
   Index<|-- Ai
   Ai <|-- Board
   Index <|-- Engine
+  Index: player_move = input("Enter your move")
+  Index: engine.make_move(player_move)
+  Index: ai_move = ai.calculate_move(board, False)
+  Index: engine.make_move(ai_move)
+  Index: print(engine.board)
+  Ai: calculate_move()
+  Board: get_moves_from_board()
+  Engine: make_move()
+  Engine: self.board
   ```
