@@ -6,7 +6,7 @@ Significant improvements in both memory- and computation-efficiency. This week i
 ## Unclear and troubling things
 What should happen when the Ai notices it's losing in mate in 7? How is the best move selected when all moves result in a checkmate?
 
-***does always preferring mate in least moves fix this problem automatically?*** If the winning party always chooses mate in least moves, wouldn't the losing party always choose mate in most moves as a side effect? This would result in making illegal move only when checkmate has already occured.
+***does always preferring mate in least moves fix this problem automatically?*** If the winning party always prefers mate in least moves, wouldn't the losing party always choose mate in most moves as a side effect? This would result in making illegal move only when checkmate has already occured.
 
 How can i gain slightly efficiency to make the game comfortable with depth 7 minimax?
 
