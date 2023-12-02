@@ -7,7 +7,8 @@ board = chess.Board()
 chess_engine = Engine()
 ai = Ai()
 
-print(chess_engine.board)
+for i in chess_engine.board:
+    print(''.join(i))
 
 editor_open = False
 
