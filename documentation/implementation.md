@@ -4,7 +4,7 @@
 This project is divided into 3 classes: Ai, Board and Engine.
 
 ### Board
-This class is responsible for generating legal moves. This class is used solely by The Ai class. Board's only interface to the Ai is the .get_moves_from_board method, which takes board and player's color as argument.
+This class is responsible for generating legal moves. This class is used solely by The Ai class. Board's only interface to outside modules is the .get_moves_from_board method, which takes board and player's color as argument. 
 
 ### Engine
 This class is responsible for keeping track of the game state, and verifying the player's moves. this class's game matrix is updated every time Ai's .calculate_move method returns a new move, and when player inputs a valid move.
