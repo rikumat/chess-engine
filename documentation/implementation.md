@@ -4,13 +4,13 @@
 This project is divided into 3 classes: Ai, Board and Engine.
 
 ### Board
-This class is responsible for generating legal moves. an Instance of this class will be injected to the Ai class in the future.
+This class is responsible for generating legal moves. This class is used solely by The Ai class. Board's only interface to outside modules is the .get_moves_from_board method, which takes board and player's color as argument. 
 
 ### Engine
-This class is responsible for keeping track of the game state, and verifying the player's moves.
+This class is responsible for keeping track of the game state, and verifying the player's moves. this class's game matrix is updated every time Ai's .calculate_move method returns a new move, and when player inputs a valid move.
 
 ### Ai
-This class is responsible for calculating a move in response to the user's move.
+This class is responsible for calculating a move in response to the user's move. This class is only used in the main gameloop found in index.py. This class's only interface to other modules is the .calculate_move method, which takes a 2-dimensional list (chess board) and players's color as arguments, and returns a move in the same form user inputs their move.
 
 ## Utils
 
@@ -37,4 +37,21 @@ loop on every recursive Alphabeta call
     end
 Ai -->> Index: "b8c6"
 Index -->> User: output b8c6
+  ```
+
+## class diagram
+```mermaid
+classDiagram
+  Index<|-- Ai
+  Ai <|-- Board
+  Index <|-- Engine
+  Index: player_move = input("Enter your move")
+  Index: engine.make_move(player_move)
+  Index: ai_move = ai.calculate_move(board, False)
+  Index: engine.make_move(ai_move)
+  Index: print(engine.board)
+  Ai: calculate_move()
+  Board: get_moves_from_board()
+  Engine: make_move()
+  Engine: self.board
   ```
