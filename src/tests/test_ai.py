@@ -1,5 +1,4 @@
 import unittest
-import chess
 from services.ai import Ai
 
 empty_board = [

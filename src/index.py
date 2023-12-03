@@ -1,9 +1,8 @@
-import chess
 import utils
 from services.engine import Engine
 from services.ai import Ai
 
-board = chess.Board()
+
 chess_engine = Engine()
 ai = Ai()
 

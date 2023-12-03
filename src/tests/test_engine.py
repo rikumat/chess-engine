@@ -1,10 +1,9 @@
 import unittest
 from services.engine import Engine
-import chess
 
 class TestEngine(unittest.TestCase):
     def setUp(self):
-        self.engine=Engine(chess.Board())
+        pass
 
 #     def test_make_move_updates_board_correctly(self):
 #         self.engine.make_move("e2e4")

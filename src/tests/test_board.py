@@ -1,7 +1,6 @@
 import copy
 from itertools import chain
 import unittest
-import utils
 from entities.board import Board
 empty_board = [[".", ".", ".", ".", ".", ".", ".", "."][:] for x in range(8)]
 class TestBoard(unittest.TestCase):

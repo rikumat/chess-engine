@@ -1,7 +1,5 @@
 from entities.board import Board
-from copy import deepcopy
 from math import sqrt
-import chess
 import utils
 
 generator = Board()

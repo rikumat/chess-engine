@@ -1,4 +1,3 @@
-import chess
 import utils
 class Engine():
     """This class is responsible for keeping the state of the game."""
