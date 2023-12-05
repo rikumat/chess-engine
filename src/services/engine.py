@@ -28,6 +28,12 @@ class Engine():
         start = utils.square_to_coordinates(move[:2])
         end=utils.square_to_coordinates(move[2:])
 
+        if self.board[start[0]][start[1]]=="p" and end[0]==0:
+            self.board[start[0]][start[1]]=="q" 
+        
+        if self.board[start[0]][start[1]]=="P" and end[0]==7:
+            self.board[start[0]][start[1]]=="Q" 
+
         self.board[end[0]][end[1]]=self.board[start[0]][start[1]]
         self.board[start[0]][start[1]]="."
 

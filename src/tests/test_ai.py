@@ -17,7 +17,6 @@ class TestAi(unittest.TestCase):
         self.ai = Ai()
 
     def test_ai_notices_easy_checkmate(self):
-        board = chess.Board("4qk2/8/8/8/8/8/PP5R/K7 b KQkq - 0 1")
         test_board = [
             ["k", ".", ".", ".", ".", ".", ".", "."],
             ["p", "p", ".", ".", ".", ".", ".", "."],

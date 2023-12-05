@@ -94,100 +94,136 @@ class Ai():
                     game_data["ai_king"]=utils.coordinates_to_square((i, j))
                 if piece=="K":
                     game_data["player_king"]=utils.coordinates_to_square((i, j))
-
-        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 7, white)
+        move_dict={}
+        cached_moves = {}
+        value, move = 0, 0
+        for i in range(4, 8):
+            print(i)
+            value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
         print(value)
         return move
 
-    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing):
+    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
         """
         This function uses minimax algorithm with alpha beta pruning
         to calculate the best possible move
         from a given chessboard.
         """
+        player_number={
+            True: "1",
+            False: "0"
+        }
         if game_data["winner"] != 0:
             return game_data["winner"]*10**10+game_data["winner"]*depth, None
-    
 
         if depth==0:
             return self.evaluate(board, game_data), None
 
+        board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
+        transposition_key=board_key+str(depth)
+        first_move = move_dict.get(board_key)
+        cached_move = memo.get(transposition_key)
+
+        if cached_move != None:
+            return cached_move
+
         if maximizing:
             best_move=None
             max_eval=-10**15
-            broken=False
-            for section in generator.get_moves_from_board(board, True):
-                if broken: break
-                for move in section:
-                    coords_start = utils.square_to_coordinates(move[:2])
-                    coords_end = utils.square_to_coordinates(move[2:])
-                    piece_taken = board[coords_end[0]][coords_end[1]]
-                    if piece_taken=="k":
-                        game_data["winner"]=1
-                    board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
-                    board[coords_start[0]][coords_start[1]]="."
+            moves = generator.get_moves_from_board(board, True)
 
-                    game_data["balance"]-=values[piece_taken]
+            if first_move!=None and moves[-1]!=first_move:
+                moves.append(first_move)
 
-                    if move[:2]==game_data["player_king"]:
-                        game_data["player_king"]=move[2:]
+            for i in range(len(moves)-1, -1, -1):
+                move = moves[i]
 
-                    evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False)
-                    game_data["winner"]=0
-                    game_data["game_over"]=False
-                    game_data["balance"]+=values[piece_taken]
-
-                    board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
-                    board[coords_end[0]][coords_end[1]]=piece_taken
-
-                    alpha = max(alpha, evaluation)
-                    if evaluation>max_eval:
-                        best_move=move
-
-                    max_eval = max(evaluation, max_eval)
-
-                    if alpha >= beta:
-                        broken=True
-                        break
-
-            return max_eval, best_move
-
-        min_eval = 10**15
-        best_move=None
-        broken = False
-        for section in generator.get_moves_from_board(board, False):
-            if broken: break
-            for move in section:
                 coords_start = utils.square_to_coordinates(move[:2])
                 coords_end = utils.square_to_coordinates(move[2:])
 
                 piece_taken = board[coords_end[0]][coords_end[1]]
 
-                if piece_taken=="K":
-                    game_data["winner"]=-1
+                if piece_taken=="k":
+                    game_data["winner"]=1
+
+                if coords_end[0]==7 and board[coords_start[0]][coords_start[1]]=="P":
+                    board[coords_start[0]][coords_start[1]]="Q"
 
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
 
                 game_data["balance"]-=values[piece_taken]
-                # if move[:2]==new_data["ai_king"]:
-                #     new_data["ai_king"]=move[2:]
 
-                evaluation, next_move, = self.alphabeta(board, alpha, beta, game_data, depth-1, True)
+                if move[:2]==game_data["player_king"]:
+                    game_data["player_king"]=move[2:]
+
+                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
 
                 game_data["winner"]=0
+                game_data["game_over"]=False
                 game_data["balance"]+=values[piece_taken]
 
                 board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
                 board[coords_end[0]][coords_end[1]]=piece_taken
 
-                beta = min(beta, evaluation)
-
-                if evaluation < min_eval:
+                alpha = max(alpha, evaluation)
+                if evaluation>max_eval:
                     best_move=move
 
-                min_eval = min(min_eval, evaluation)
-                if beta <= alpha:
-                    broken=True
+                max_eval = max(evaluation, max_eval)
+
+                if alpha >= beta:
                     break
+
+            move_dict[board_key]=best_move
+            memo[transposition_key]=(max_eval, best_move)
+            return max_eval, best_move
+
+        min_eval = 10**15
+        best_move=None
+
+        moves = generator.get_moves_from_board(board, False)
+        if first_move!=None and moves[-1]!=first_move:
+            moves.append(first_move)
+
+        for i in range(len(moves)-1, -1, -1):
+            move = moves[i]
+            coords_start = utils.square_to_coordinates(move[:2])
+            coords_end = utils.square_to_coordinates(move[2:])
+
+            piece_taken = board[coords_end[0]][coords_end[1]]
+
+            if piece_taken=="K":
+                game_data["winner"]=-1
+
+            if coords_end[0]==0 and board[coords_start[0]][coords_start[1]]=="p":
+                board[coords_start[0]][coords_start[1]]="q"
+
+            board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
+            board[coords_start[0]][coords_start[1]]="."
+
+            game_data["balance"]-=values[piece_taken]
+            # if move[:2]==new_data["ai_king"]:
+            #     new_data["ai_king"]=move[2:]
+
+            evaluation, next_move, = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
+
+            game_data["winner"]=0
+            game_data["balance"]+=values[piece_taken]
+
+            board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
+            board[coords_end[0]][coords_end[1]]=piece_taken
+
+            beta = min(beta, evaluation)
+
+            if evaluation < min_eval:
+                best_move=move
+
+            min_eval = min(min_eval, evaluation)
+            if beta <= alpha:
+                break
+
+        move_dict[board_key]=best_move
+        memo[transposition_key]=(min_eval, best_move)
+
         return min_eval, best_move
