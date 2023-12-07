@@ -57,6 +57,7 @@ class Ai():
         Positive valuation means advantage for white,
         negative means advantage for black.
         """
+
         return game_data["balance"]
         value=0
 
@@ -96,20 +97,17 @@ class Ai():
         value, move = 0, 0
         final_board=None
         ret=0
-        for i in range(4, 15):
+        for i in range(4, 7):
                 start_time = datetime.now()
                 value, move, final_board, ret, trace = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
                 print(i, end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
-        print(move, value, i)
-        print(ret)
-        print("_____trace alkaa_________")
-        for i in trace:
-            for j in i[1]:
-                print(j)
-            print("yksi trace tehty")
-            print(i[0])
+        print("____final_board_____")
+        print(value)
+        for i in final_board:
+            print(i)
+
 
         return move
 
@@ -139,10 +137,11 @@ class Ai():
             return cached_move
 
         if maximizing:
-            final_board = None
+            last_board = None
             best_move=None
             best_board = None
             max_eval=-10**15
+            best_ret = 0
             moves = generator.get_moves_from_board(board, True)
 
             if first_move!=None and moves[-1]!=first_move:
@@ -159,7 +158,7 @@ class Ai():
                 current_piece_after = current_piece
 
                 multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-                multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+                multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
                 multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
 
                 if piece_taken=="k":
@@ -172,21 +171,24 @@ class Ai():
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
 
-                game_data["balance"]-=values[piece_taken]*multiplier_opponent
-                game_data["balance"]-=values[current_piece]*multiplier_own
-                game_data["balance"]+=values[current_piece_after]*multiplier_own_after
+                balance_change=0
+                balance_change-=values[piece_taken]*multiplier_opponent
+                balance_change-=values[current_piece]*multiplier_own
+                balance_change+=values[current_piece_after]*multiplier_own_after
+
+                game_data["balance"]+=balance_change
 
                 evaluation, next_move, final_board, ret, trace = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
 
                 game_data["winner"]=0
 
-                game_data["balance"]+=values[piece_taken]*multiplier_opponent
-                game_data["balance"]+=values[current_piece]*multiplier_own
-                game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+                game_data["balance"]-=balance_change
 
                 if evaluation>max_eval:
                     best_move=move
                     best_board = deepcopy(board)
+                    best_ret = ret
+                    last_board = final_board
 
                 board[coords_start[0]][coords_start[1]]=current_piece
                 board[coords_end[0]][coords_end[1]]=piece_taken
@@ -199,15 +201,17 @@ class Ai():
 
                 if alpha >= beta:
                     break
+
             trace.append((best_move, best_board))
             move_dict[board_key]=best_move
             memo[transposition_key]=(max_eval, best_move, deepcopy(final_board), ret, deepcopy(trace))
-            return max_eval, best_move, final_board, ret, deepcopy(trace)
+            return max_eval, best_move, last_board, best_ret, deepcopy(trace)
 
         min_eval = 10**15
         best_move=None
-        final_board = None
+        last_board = None
         best_board = None
+        best_ret = 0
         moves = generator.get_moves_from_board(board, False)
         if first_move!=None and moves[-1]!=first_move:
             moves.append(first_move)
@@ -226,10 +230,11 @@ class Ai():
             
             if coords_end[0]==7 and current_piece=="p":
                 board[coords_start[0]][coords_start[1]]="q"
+                current_piece_after="q"
 
 
             multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-            multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+            multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
             multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
 
 
@@ -240,21 +245,22 @@ class Ai():
             board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
             board[coords_start[0]][coords_start[1]]="."
 
-            game_data["balance"]-=values[piece_taken]*multiplier_opponent
-            game_data["balance"]-=values[current_piece]*multiplier_own
-            game_data["balance"]+=values[current_piece_after]*multiplier_own_after
+            balance_change=0
+            balance_change-=values[piece_taken]*multiplier_opponent
+            balance_change-=values[current_piece]*multiplier_own
+            balance_change+=values[current_piece_after]*multiplier_own_after
+            game_data["balance"]+=balance_change
 
             evaluation, next_move, final_board, ret, trace = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
 
             game_data["winner"]=0
-
-            game_data["balance"]+=values[piece_taken]*multiplier_opponent
-            game_data["balance"]+=values[current_piece]*multiplier_own
-            game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+            game_data["balance"]-=balance_change
 
             if evaluation < min_eval:
                 best_move=move
+                last_board = deepcopy(final_board)
                 best_board = deepcopy(board)
+                best_ret = ret
 
             board[coords_start[0]][coords_start[1]]=current_piece
             board[coords_end[0]][coords_end[1]]=piece_taken
@@ -264,7 +270,9 @@ class Ai():
             min_eval = min(min_eval, evaluation)
             if beta <= alpha:
                 break
+
         trace.append((best_move, best_board))
         move_dict[board_key]=best_move
         memo[transposition_key]=(min_eval, best_move, deepcopy(final_board), ret, deepcopy(trace))
-        return min_eval, best_move, final_board, ret, deepcopy(trace)
+        return min_eval, best_move, last_board, best_ret, deepcopy(trace)
+        

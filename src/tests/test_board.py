@@ -224,4 +224,16 @@ class TestBoard(unittest.TestCase):
         moves = self.board.get_moves_from_board(empty_board, False)
         self.assertEqual(moves, [])
 
-
+    def test_moves_correct(self):
+        test_board = [
+                ["k", ".", ".", ".", ".", ".", ".", "."],
+                [".", "R", ".", ".", ".", ".", ".", "."],
+                [".", ".", ".", ".", ".", ".", ".", "."],
+                [".", ".", ".", ".", ".", ".", ".", "."],
+                [".", ".", ".", ".", ".", ".", ".", "."],
+                [".", ".", ".", ".", ".", ".", ".", "."],
+                ["p", ".", ".", "r", ".", ".", ".", "."],
+                [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+        self.board.get_moves_from_board(test_board, True)
+        self.assertIn("c4a2", self.board.moves)
