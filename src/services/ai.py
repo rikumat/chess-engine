@@ -1,4 +1,5 @@
 from datetime import datetime
+from copy import deepcopy
 import sys
 from entities.board import Board
 from math import sqrt
@@ -44,11 +45,11 @@ class Ai():
         pass
 
     def calculate_balance(self, board):
-        value=0
+        balance = 0
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
-                value+=values[piece]
-        return value
+                balance+=multiplier_matrices[piece][i][j]*values[piece]
+        return balance
 
     def evaluate(self, board, game_data):
         """
@@ -89,19 +90,27 @@ class Ai():
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
         game_data["winner"]=0
-        for i, row in enumerate(board):
-            for j, piece in enumerate(row):
-                game_data["balance"]+=multiplier_matrices[piece][i][j]*values[piece]
+
         move_dict={}
         cached_moves = {}
         value, move = 0, 0
+        final_board=None
+        ret=0
         for i in range(4, 15):
                 start_time = datetime.now()
-                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
+                value, move, final_board, ret, trace = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
                 print(i, end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
-        print(value, i)
+        print(move, value, i)
+        print(ret)
+        print("_____trace alkaa_________")
+        for i in trace:
+            for j in i[1]:
+                print(j)
+            print("yksi trace tehty")
+            print(i[0])
+
         return move
 
     def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
@@ -116,10 +125,10 @@ class Ai():
         }
 
         if game_data["winner"] != 0:
-            return game_data["winner"]*10**10+game_data["winner"]*depth, None
+            return game_data["winner"]*10**10+game_data["winner"]*depth, None, deepcopy(board), "checkmate", [(None, deepcopy(board))]
 
         if depth==0:
-            return self.evaluate(board, game_data), None
+            return self.evaluate(board, game_data), None, deepcopy(board), "depth", [(None, deepcopy(board))]
 
         board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
         transposition_key=board_key+"|"+str(depth)
@@ -130,7 +139,9 @@ class Ai():
             return cached_move
 
         if maximizing:
+            final_board = None
             best_move=None
+            best_board = None
             max_eval=-10**15
             moves = generator.get_moves_from_board(board, True)
 
@@ -165,12 +176,17 @@ class Ai():
                 game_data["balance"]-=values[current_piece]*multiplier_own
                 game_data["balance"]+=values[current_piece_after]*multiplier_own_after
 
-                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
+                evaluation, next_move, final_board, ret, trace = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
+
                 game_data["winner"]=0
 
                 game_data["balance"]+=values[piece_taken]*multiplier_opponent
                 game_data["balance"]+=values[current_piece]*multiplier_own
                 game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+
+                if evaluation>max_eval:
+                    best_move=move
+                    best_board = deepcopy(board)
 
                 board[coords_start[0]][coords_start[1]]=current_piece
                 board[coords_end[0]][coords_end[1]]=piece_taken
@@ -183,14 +199,15 @@ class Ai():
 
                 if alpha >= beta:
                     break
-
+            trace.append((best_move, best_board))
             move_dict[board_key]=best_move
-            memo[transposition_key]=(max_eval, best_move)
-            return max_eval, best_move
+            memo[transposition_key]=(max_eval, best_move, deepcopy(final_board), ret, deepcopy(trace))
+            return max_eval, best_move, final_board, ret, deepcopy(trace)
 
         min_eval = 10**15
         best_move=None
-
+        final_board = None
+        best_board = None
         moves = generator.get_moves_from_board(board, False)
         if first_move!=None and moves[-1]!=first_move:
             moves.append(first_move)
@@ -227,7 +244,7 @@ class Ai():
             game_data["balance"]-=values[current_piece]*multiplier_own
             game_data["balance"]+=values[current_piece_after]*multiplier_own_after
 
-            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
+            evaluation, next_move, final_board, ret, trace = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
 
             game_data["winner"]=0
 
@@ -235,19 +252,19 @@ class Ai():
             game_data["balance"]+=values[current_piece]*multiplier_own
             game_data["balance"]-=values[current_piece_after]*multiplier_own_after
 
+            if evaluation < min_eval:
+                best_move=move
+                best_board = deepcopy(board)
+
             board[coords_start[0]][coords_start[1]]=current_piece
             board[coords_end[0]][coords_end[1]]=piece_taken
 
             beta = min(beta, evaluation)
 
-            if evaluation < min_eval:
-                best_move=move
-
             min_eval = min(min_eval, evaluation)
             if beta <= alpha:
                 break
-
+        trace.append((best_move, best_board))
         move_dict[board_key]=best_move
-        memo[transposition_key]=(min_eval, best_move)
-
-        return min_eval, best_move
+        memo[transposition_key]=(min_eval, best_move, deepcopy(final_board), ret, deepcopy(trace))
+        return min_eval, best_move, final_board, ret, deepcopy(trace)
