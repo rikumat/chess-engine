@@ -147,16 +147,17 @@ class Ai():
                 current_piece = board[coords_start[0]][coords_start[1]]
                 current_piece_after = current_piece
 
+                if coords_end[0]==0 and current_piece=="P":
+                    board[coords_start[0]][coords_start[1]]="Q"
+                    current_piece_after="Q"
+
                 multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-                multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+                multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
                 multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
 
                 if piece_taken=="k":
                     game_data["winner"]=1
 
-                if coords_end[0]==0 and current_piece=="P":
-                    board[coords_start[0]][coords_start[1]]="Q"
-                    current_piece_after="Q"
 
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
@@ -209,16 +210,12 @@ class Ai():
             
             if coords_end[0]==7 and current_piece=="p":
                 board[coords_start[0]][coords_start[1]]="q"
+                current_piece_after="q"
 
 
             multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-            multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+            multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
             multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
-
-
-            if coords_end[0]==0 and board[coords_start[0]][coords_start[1]]=="p":
-                board[coords_start[0]][coords_start[1]]="q"
-                current_piece_after = "q"
 
             board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
             board[coords_start[0]][coords_start[1]]="."
