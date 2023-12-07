@@ -1,18 +1,21 @@
+from datetime import datetime
+import sys
 from entities.board import Board
 from math import sqrt
-import utils
 
+import utils
+from multiplier_matrices import multiplier_matrices
 generator = Board()
 
 values = {
     ".":0,
-    "k": -10**20,
+    "k": -10**10,
     "q": -90,
     "r": -50,
     "n":-30,
     "b":-30,
     "p":-10,
-    "K": 10**20,
+    "K": 10**10,
     "Q": 90,
     "R": 50,
     "N":30,
@@ -81,26 +84,24 @@ class Ai():
         return value
 
     def calculate_move(self, board, white):
-        print(board)
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function."""
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
-        game_data["game_over"]=False
         game_data["winner"]=0
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
-                if piece=="k":
-                    game_data["ai_king"]=utils.coordinates_to_square((i, j))
-                if piece=="K":
-                    game_data["player_king"]=utils.coordinates_to_square((i, j))
+                game_data["balance"]+=multiplier_matrices[piece][i][j]*values[piece]
         move_dict={}
         cached_moves = {}
         value, move = 0, 0
-        for i in range(4, 8):
-            print(i)
-            value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
-        print(value)
+        for i in range(4, 15):
+                start_time = datetime.now()
+                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
+                print(i, end="\n", flush=True)
+                if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
+                    break
+        print(value, i)
         return move
 
     def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
@@ -113,6 +114,7 @@ class Ai():
             True: "1",
             False: "0"
         }
+
         if game_data["winner"] != 0:
             return game_data["winner"]*10**10+game_data["winner"]*depth, None
 
@@ -120,7 +122,7 @@ class Ai():
             return self.evaluate(board, game_data), None
 
         board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
-        transposition_key=board_key+str(depth)
+        transposition_key=board_key+"|"+str(depth)
         first_move = move_dict.get(board_key)
         cached_move = memo.get(transposition_key)
 
@@ -142,28 +144,35 @@ class Ai():
                 coords_end = utils.square_to_coordinates(move[2:])
 
                 piece_taken = board[coords_end[0]][coords_end[1]]
+                current_piece = board[coords_start[0]][coords_start[1]]
+                current_piece_after = current_piece
+
+                multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
+                multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+                multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
 
                 if piece_taken=="k":
                     game_data["winner"]=1
 
-                if coords_end[0]==7 and board[coords_start[0]][coords_start[1]]=="P":
+                if coords_end[0]==0 and current_piece=="P":
                     board[coords_start[0]][coords_start[1]]="Q"
+                    current_piece_after="Q"
 
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
 
-                game_data["balance"]-=values[piece_taken]
-
-                if move[:2]==game_data["player_king"]:
-                    game_data["player_king"]=move[2:]
+                game_data["balance"]-=values[piece_taken]*multiplier_opponent
+                game_data["balance"]-=values[current_piece]*multiplier_own
+                game_data["balance"]+=values[current_piece_after]*multiplier_own_after
 
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
-
                 game_data["winner"]=0
-                game_data["game_over"]=False
-                game_data["balance"]+=values[piece_taken]
 
-                board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
+                game_data["balance"]+=values[piece_taken]*multiplier_opponent
+                game_data["balance"]+=values[current_piece]*multiplier_own
+                game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+
+                board[coords_start[0]][coords_start[1]]=current_piece
                 board[coords_end[0]][coords_end[1]]=piece_taken
 
                 alpha = max(alpha, evaluation)
@@ -192,26 +201,41 @@ class Ai():
             coords_end = utils.square_to_coordinates(move[2:])
 
             piece_taken = board[coords_end[0]][coords_end[1]]
+            current_piece = board[coords_start[0]][coords_start[1]]
+            current_piece_after = current_piece
 
             if piece_taken=="K":
                 game_data["winner"]=-1
+            
+            if coords_end[0]==7 and current_piece=="p":
+                board[coords_start[0]][coords_start[1]]="q"
+
+
+            multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
+            multiplier_own_after = multiplier_matrices[current_piece][coords_end[0]][coords_end[1]]
+            multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
+
 
             if coords_end[0]==0 and board[coords_start[0]][coords_start[1]]=="p":
                 board[coords_start[0]][coords_start[1]]="q"
+                current_piece_after = "q"
 
             board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
             board[coords_start[0]][coords_start[1]]="."
 
-            game_data["balance"]-=values[piece_taken]
-            # if move[:2]==new_data["ai_king"]:
-            #     new_data["ai_king"]=move[2:]
+            game_data["balance"]-=values[piece_taken]*multiplier_opponent
+            game_data["balance"]-=values[current_piece]*multiplier_own
+            game_data["balance"]+=values[current_piece_after]*multiplier_own_after
 
-            evaluation, next_move, = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
+            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
 
             game_data["winner"]=0
-            game_data["balance"]+=values[piece_taken]
 
-            board[coords_start[0]][coords_start[1]]=board[coords_end[0]][coords_end[1]]
+            game_data["balance"]+=values[piece_taken]*multiplier_opponent
+            game_data["balance"]+=values[current_piece]*multiplier_own
+            game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+
+            board[coords_start[0]][coords_start[1]]=current_piece
             board[coords_end[0]][coords_end[1]]=piece_taken
 
             beta = min(beta, evaluation)

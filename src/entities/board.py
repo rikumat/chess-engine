@@ -1,5 +1,5 @@
 import utils
-
+from multiplier_matrices import multiplier_matrices
 move_priority = {
     "p": 15,
     "n":10,
@@ -10,7 +10,7 @@ move_priority = {
 }
 
 values = {
-    "k": 10**20,
+    "k": 10**10,
     "q": 90,
     "r": 50,
     "n":30,
@@ -245,10 +245,15 @@ class Board():
             "p": self.get_pawn_moves,
         }
         def move_sort(move):
-            coords = utils.square_to_coordinates(move[2:])
+            coords_end = utils.square_to_coordinates(move[2:])
+            coords_start=utils.square_to_coordinates(move[:2])
             value=0
-            value+=values[board[coords[0]][coords[1]].lower()]
-            value
+            taken = board[coords_end[0]][coords_end[1]]
+            own = board[coords_start[0]][coords_start[1]]
+            value += values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]]
+            value += values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]
+            value -= values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]]
+
             return value
 
         for i, row in enumerate(board):
@@ -261,4 +266,5 @@ class Board():
                     functions[piece](board, utils.coordinates_to_square((i, j)))
         self.moves.sort(key=move_sort)
         return self.moves
+
     
