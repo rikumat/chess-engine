@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import sys
 from entities.board import Board
 from math import sqrt
@@ -6,6 +7,7 @@ from math import sqrt
 import utils
 from multiplier_matrices import multiplier_matrices
 generator = Board()
+
 
 values = {
     ".":0,

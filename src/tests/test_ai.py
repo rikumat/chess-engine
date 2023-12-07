@@ -87,7 +87,7 @@ class TestAi(unittest.TestCase):
             [".", ".", ".", ".", ".", ".", ".", "K"]
         ]
         move = self.ai.calculate_move(test_board, False)
-        self.assertEqual(move, "a2a2")
+        self.assertEqual(move, "a2a1")
 
 
 
