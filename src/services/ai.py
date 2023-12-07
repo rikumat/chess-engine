@@ -44,11 +44,11 @@ class Ai():
         pass
 
     def calculate_balance(self, board):
-        value=0
+        balance=0
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
-                value+=values[piece]
-        return value
+                balance+=multiplier_matrices[piece][i][j]*values[piece]
+        return balance
 
     def evaluate(self, board, game_data):
         """
@@ -89,9 +89,7 @@ class Ai():
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
         game_data["winner"]=0
-        for i, row in enumerate(board):
-            for j, piece in enumerate(row):
-                game_data["balance"]+=multiplier_matrices[piece][i][j]*values[piece]
+
         move_dict={}
         cached_moves = {}
         value, move = 0, 0
@@ -162,16 +160,15 @@ class Ai():
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
 
-                game_data["balance"]-=values[piece_taken]*multiplier_opponent
-                game_data["balance"]-=values[current_piece]*multiplier_own
-                game_data["balance"]+=values[current_piece_after]*multiplier_own_after
-
+                balance_change=0
+                balance_change-=values[piece_taken]*multiplier_opponent
+                balance_change-=values[current_piece]*multiplier_own
+                balance_change+=values[current_piece_after]*multiplier_own_after
+                game_data["balance"]+=balance_change
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
                 game_data["winner"]=0
 
-                game_data["balance"]+=values[piece_taken]*multiplier_opponent
-                game_data["balance"]+=values[current_piece]*multiplier_own
-                game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+                game_data["balance"]-=balance_change
 
                 board[coords_start[0]][coords_start[1]]=current_piece
                 board[coords_end[0]][coords_end[1]]=piece_taken
@@ -220,17 +217,18 @@ class Ai():
             board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
             board[coords_start[0]][coords_start[1]]="."
 
-            game_data["balance"]-=values[piece_taken]*multiplier_opponent
-            game_data["balance"]-=values[current_piece]*multiplier_own
-            game_data["balance"]+=values[current_piece_after]*multiplier_own_after
+            balance_change=0
+            balance_change-=values[piece_taken]*multiplier_opponent
+            balance_change-=values[current_piece]*multiplier_own
+            balance_change+=values[current_piece_after]*multiplier_own_after
+
+            game_data["balance"]+=balance_change
 
             evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
 
             game_data["winner"]=0
 
-            game_data["balance"]+=values[piece_taken]*multiplier_opponent
-            game_data["balance"]+=values[current_piece]*multiplier_own
-            game_data["balance"]-=values[current_piece_after]*multiplier_own_after
+            game_data["balance"]-=balance_change
 
             board[coords_start[0]][coords_start[1]]=current_piece
             board[coords_end[0]][coords_end[1]]=piece_taken
