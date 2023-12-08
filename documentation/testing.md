@@ -15,8 +15,8 @@ Unittests for this class test that the board gets updated correctly when a move 
 Utils is a utility file containing several helper functions not bound to a class. Currently these functions are limited to square_to_coordinates and coordinates_to_square, which convert a square to index coordinates (y, x) and vice versa. These functions are tested trivially by ensuring they produce the correct conversions.
 
 # Test coverage
-on 2.12.2023 test branch coverage of tested files is 93%.
-![alt text](./images/coverage_2-12-2023.png)
+on 8.12.2023 test branch coverage of tested files is 95%.
+![alt text](./images/coverage_8-12-2023.png)
 
 
 # Accuracy tests
