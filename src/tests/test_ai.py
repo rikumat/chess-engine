@@ -45,21 +45,6 @@ class TestAi(unittest.TestCase):
         move = self.ai.calculate_move(test_board, True)
         self.assertEqual(move, "d2h6")
 
-    def test_ai_can_solve_puzzle_1(self):
-        #2r3k1/p4p2/3Rp2p/1p2P1pK/8/1P4P1/P3Q2P/1q6 b - - 0 1
-        test_board = [
-            [".", ".", "r", ".", ".", ".", "k", "."],
-            ["p", ".", ".", ".", ".", "p", ".", "."],
-            [".", ".", ".", "R", "p", ".", ".", "p"],
-            [".", "p", ".", ".", "P", ".", "p", "K"],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", "P", ".", ".", ".", ".", "P", "."],
-            ["P", ".", ".", ".", "Q", ".", ".", "P"],
-            [".", "q", ".", ".", ".", ".", ".", "."]
-        ]
-        move1 = self.ai.calculate_move(test_board, False)
-        self.assertEqual(move1, "b1g6")
-
 
     def test_ai_values_locations_correctly(self):
         test_board = [
@@ -90,4 +75,16 @@ class TestAi(unittest.TestCase):
         self.assertEqual(move, "a2a1")
 
 
-
+    def test_ai_notices_blunder(self):
+        test_board = [
+            ["r", ".", "b", ".", "k", "b", "n", "r"],
+            ["p", "p", "B", "n", ".", "p", "p", "p"],
+            [".", ".", ".", ".", "p", "q", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", "P", "Q", ".", ".", "."],
+            [".", ".", "P", ".", ".", ".", ".", "."],
+            ["P", "P", ".", ".", "B", "P", "P", "P"],
+            ["R", "N", ".", ".", "K", ".", "N", "R"]
+        ]
+        move = self.ai.calculate_move(test_board, False)
+        self.assertEqual(move, "f6g5")

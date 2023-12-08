@@ -5,16 +5,13 @@ from math import sqrt
 import utils
 from multiplier_matrices import multiplier_matrices
 generator = Board()
-cached_moves = {}
 values = {
     ".":0,
-    "k": -10**10,
     "q": -90,
     "r": -50,
     "n":-30,
     "b":-30,
     "p":-10,
-    "K": 10**10,
     "Q": 90,
     "R": 50,
     "N":30,
@@ -46,8 +43,9 @@ class Ai():
         balance=0
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
-                balance+=multiplier_matrices[piece][i][j]*values[piece]
-        return balance
+                if piece.lower()!="k":
+                    balance+=multiplier_matrices[piece][i][j]*values[piece]
+        return round(balance, 4)
 
     def evaluate(self, board, game_data):
         """
@@ -55,7 +53,22 @@ class Ai():
         Positive valuation means advantage for white,
         negative means advantage for black.
         """
-        return game_data["balance"]
+        value = round(game_data["balance"], 4)
+        return value
+
+        balance = self.calculate_balance(board)
+        # if round(balance, 4) != round(game_data["balance"], 4):
+            # print("________")
+
+            # print(self.calculate_balance(board))
+            # print(round(self.calculate_balance(board), 4))
+
+            # print(game_data["balance"])
+            # print(round(game_data["balance"], 4))
+
+            # print("___________")
+
+        return self.calculate_balance(board)
         value=0
 
         ai_king = utils.square_to_coordinates(game_data["ai_king"])
@@ -85,16 +98,16 @@ class Ai():
     def calculate_move(self, board, white):
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function."""
+        cached_moves = {}
+        cached_order={}
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
         game_data["winner"]=0
-
-        move_dict={}
-
+        print(round(4.111111, 4))
         value, move = 0, 0
         for i in range(4, 15):
                 start_time = datetime.now()
-                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, move_dict, cached_moves)
+                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_order, cached_moves)
                 print(i, end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
@@ -155,15 +168,19 @@ class Ai():
                 if piece_taken=="k":
                     game_data["winner"]=1
 
-
                 board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
                 board[coords_start[0]][coords_start[1]]="."
 
                 balance_change=0
-                balance_change-=values[piece_taken]*multiplier_opponent
-                balance_change-=values[current_piece]*multiplier_own
-                balance_change+=values[current_piece_after]*multiplier_own_after
-                game_data["balance"]+=balance_change
+                if piece_taken!="k":
+                    balance_change-=values[piece_taken]*multiplier_opponent
+                
+                if current_piece !="K":
+                    balance_change-=values[current_piece]*multiplier_own
+                    balance_change+=values[current_piece_after]*multiplier_own_after
+                
+
+                game_data["balance"]+=round(balance_change, 4)
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
                 game_data["winner"]=0
 
@@ -180,7 +197,7 @@ class Ai():
 
                 if alpha >= beta:
                     break
-
+            
             move_dict[board_key]=best_move
             memo[transposition_key]=(max_eval, best_move)
             return max_eval, best_move
@@ -208,7 +225,6 @@ class Ai():
                 board[coords_start[0]][coords_start[1]]="q"
                 current_piece_after="q"
 
-
             multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
             multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
             multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
@@ -217,11 +233,14 @@ class Ai():
             board[coords_start[0]][coords_start[1]]="."
 
             balance_change=0
-            balance_change-=values[piece_taken]*multiplier_opponent
-            balance_change-=values[current_piece]*multiplier_own
-            balance_change+=values[current_piece_after]*multiplier_own_after
+            if piece_taken!="K":
+                balance_change-=values[piece_taken]*multiplier_opponent
+            
+            if current_piece !="k":
+                balance_change-=values[current_piece]*multiplier_own
+                balance_change+=values[current_piece_after]*multiplier_own_after
 
-            game_data["balance"]+=balance_change
+            game_data["balance"]+=round(balance_change, 4)
 
             evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
 

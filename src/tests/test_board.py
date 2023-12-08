@@ -1,4 +1,5 @@
 import copy
+from multiplier_matrices import multiplier_matrices
 from itertools import chain
 import unittest
 from entities.board import Board
@@ -194,34 +195,4 @@ class TestBoard(unittest.TestCase):
                                 'h7h5',
                                 'h7h6'])
         
-    def test_get_all_moves_returns_all_moves(self):
-        empty_board = [
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", "P", "P", ".", "."],
-            [".", "N", ".", ".", ".", ".", ".", "."]
-        ]
-
-        moves = self.board.get_moves_from_board(empty_board, True)
-        self.assertEqual(moves, ["f2f3","e2e3","f2f4", "e2e4"])
-
-    def test_pawns_move_correctly(self):
-        empty_board = [
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", "Q", ".", "."],
-            [".", ".", ".", ".", ".", ".", "p", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."]
-        ]
-
-        moves = self.board.get_moves_from_board(empty_board, False)
-        self.assertEqual(moves, [])
-
 

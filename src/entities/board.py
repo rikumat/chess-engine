@@ -250,11 +250,17 @@ class Board():
             value=0
             taken = board[coords_end[0]][coords_end[1]]
             own = board[coords_start[0]][coords_start[1]]
-            value += values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]]
-            value += values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]
-            value -= values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]]
 
-            return value
+            if taken.lower()=="k":
+                return 10**15
+
+            if taken!=".":
+                return round(values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]], 4)
+
+            if own.lower()!="k":
+                return round(values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]-values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]], 4)
+
+            return -1
 
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
@@ -267,4 +273,3 @@ class Board():
         self.moves.sort(key=move_sort)
         return self.moves
 
-    

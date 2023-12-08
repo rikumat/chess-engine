@@ -39,3 +39,4 @@ class TestIntegration(unittest.TestCase):
         engine=Engine(test_board)
         ai.calculate_move(engine.board, False)
         self.assertEqual(engine.board[4][3], "P")
+
