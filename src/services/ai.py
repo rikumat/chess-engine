@@ -1,14 +1,11 @@
 from datetime import datetime
-
-import sys
 from entities.board import Board
 from math import sqrt
 
 import utils
 from multiplier_matrices import multiplier_matrices
 generator = Board()
-
-
+cached_moves = {}
 values = {
     ".":0,
     "k": -10**10,
@@ -93,7 +90,7 @@ class Ai():
         game_data["winner"]=0
 
         move_dict={}
-        cached_moves = {}
+
         value, move = 0, 0
         for i in range(4, 15):
                 start_time = datetime.now()
