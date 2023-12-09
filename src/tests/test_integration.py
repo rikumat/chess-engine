@@ -1,4 +1,5 @@
 from services.engine import Engine
+from entities.board import Board
 from services.ai import Ai
 import unittest
 
@@ -6,7 +7,25 @@ ai=Ai()
 
 class TestIntegration(unittest.TestCase):
     def setUp(self):
+            self.board = Board()
             pass
+    def test_ai_notices_blunder_4(self):
+        empty_board = [
+            [".", "K", ".", "R", ".", ".", ".", "R"],
+            ["P", "P", "P", ".", ".", "P", "P", "P"],
+            [".", ".", "B", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", "q", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            ["p", "p", "p", ".", ".", ".", "p", "p"],
+            ["r", ".", "b", "k", ".", ".", ".", "r"]
+        ]
+        test_board = [x[::-1] for x in empty_board[::-1]]
+        engine = Engine(test_board)
+        move = ai.calculate_move(engine.board, False)
+        self.assertEqual(move, "d5e6")
+
+
     def test_pawn_index_doesnt_overflow(self):
         test_board = [
                 [".", ".", ".", ".", ".", ".", ".", "k"],
@@ -40,3 +59,19 @@ class TestIntegration(unittest.TestCase):
         ai.calculate_move(engine.board, False)
         self.assertEqual(engine.board[4][3], "P")
 
+    def test_ai_notices_blunder_3(self):
+        test_board = [
+            [".", ".", ".", "k", ".", ".", ".", "."],
+            [".", ".", "R", ".", ".", ".", ".", "."],
+            [".", "P", ".", "b", ".", ".", ".", "."],
+            [".", ".", ".", ".", "N", ".", ".", "."],
+            [".", ".", ".", "P", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+        engine = Engine(test_board)
+        move = ai.calculate_move(test_board, False)
+        self.assertEqual(move, "d6c7")
+
+        

@@ -255,10 +255,10 @@ class Board():
                 return 10**15
 
             if taken!=".":
-                return round(values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]], 4)
+                return round(values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]], 5)
 
             if own.lower()!="k":
-                return round(values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]-values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]], 4)
+                return round(values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]-values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]], 5)
 
             return -1
 

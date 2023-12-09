@@ -1,9 +1,10 @@
 from datetime import datetime
+from multiplier_matrices import multiplier_matrices
 from entities.board import Board
 from math import sqrt
 
 import utils
-from multiplier_matrices import multiplier_matrices
+
 generator = Board()
 values = {
     ".":0,
@@ -41,11 +42,13 @@ class Ai():
 
     def calculate_balance(self, board):
         balance=0
+
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if piece.lower()!="k":
-                    balance+=multiplier_matrices[piece][i][j]*values[piece]
-        return round(balance, 4)
+                    add = multiplier_matrices[piece][i][j]*values[piece]
+                    balance+=add
+        return round(balance, 5)
 
     def evaluate(self, board, game_data):
         """
@@ -108,10 +111,12 @@ class Ai():
         for i in range(4, 15):
                 start_time = datetime.now()
                 value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_order, cached_moves)
-                print(i, end="\n", flush=True)
+                print("calculated depth {}".format(i), end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
-        print(value, i)
+        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 6, white, cached_order, cached_moves)
+
+        print(value)
         return move
 
     def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
@@ -174,7 +179,7 @@ class Ai():
                 balance_change=0
                 if piece_taken!="k":
                     balance_change-=values[piece_taken]*multiplier_opponent
-                
+
                 if current_piece !="K":
                     balance_change-=values[current_piece]*multiplier_own
                     balance_change+=values[current_piece_after]*multiplier_own_after

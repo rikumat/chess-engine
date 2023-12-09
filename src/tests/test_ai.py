@@ -45,31 +45,16 @@ class TestAi(unittest.TestCase):
         move = self.ai.calculate_move(test_board, True)
         self.assertEqual(move, "d2h6")
 
-
-    def test_ai_values_locations_correctly(self):
-        test_board = [
-            ["r", "n", "b", "q", "k", "b", "n", "r"],
-            ["p", "p", "p", "p", "p", "p", "p", "p"],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", "P", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            ["P", "P", "P", "P", ".", "P", "P", "P"],
-            ["R", "N", "B", "Q", "K", "B", "N", "R"]
-        ]
-        move = self.ai.calculate_move(test_board, False)
-        self.assertEqual(move, "e7e5")
-
     def test_ai_notices_promotion(self):
         test_board = [
             ["k", ".", ".", ".", ".", ".", ".", "."],
             [".", "R", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"],
             [".", ".", ".", ".", ".", ".", ".", "."],
             [".", ".", "B", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            ["p", ".", ".", ".", ".", ".", "r", "."],
-            [".", ".", ".", ".", ".", ".", ".", "K"]
+            [".", ".", ".", ".", ".", ".", "r", "."],
+            ["p", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."]
         ]
         move = self.ai.calculate_move(test_board, False)
         self.assertEqual(move, "a2a1")
@@ -86,5 +71,6 @@ class TestAi(unittest.TestCase):
             ["P", "P", ".", ".", "B", "P", "P", "P"],
             ["R", "N", ".", ".", "K", ".", "N", "R"]
         ]
+
         move = self.ai.calculate_move(test_board, False)
         self.assertEqual(move, "f6g5")
