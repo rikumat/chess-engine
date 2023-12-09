@@ -10,6 +10,9 @@ The unittests of this class test, whether the algorithm reacts to selected game 
 
 Unittests for this class test that the board gets updated correctly when a move is made. 
 
+### Board
+Unittests for this class are comprehensive, and test that all the methods of the class find all legal moves. This is tested by obstructing piece's paths with own and opponent's pieces to ensure it doesn't allow moving through material.
+
 ### Utils
 
 Utils is a utility file containing several helper functions not bound to a class. Currently these functions are limited to square_to_coordinates and coordinates_to_square, which convert a square to index coordinates (y, x) and vice versa. These functions are tested trivially by ensuring they produce the correct conversions.
