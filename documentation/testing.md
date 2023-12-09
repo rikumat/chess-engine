@@ -1,5 +1,5 @@
 # Testing
-Testing of this program is currently limited to unittests of components. Currently, there are 2 classes that are tested: Ai, Engine and engine. Additionally, the helper function file utils.py is tested.
+Testing of this program is currently limited to unit- and integration tests of components. Currently, there are 3 classes that are tested: Ai, Engine and Board. Additionally, the helper function file utils.py is tested.
 
 ## Unittests
 
@@ -13,6 +13,10 @@ Unittests for this class test that the board gets updated correctly when a move 
 ### Utils
 
 Utils is a utility file containing several helper functions not bound to a class. Currently these functions are limited to square_to_coordinates and coordinates_to_square, which convert a square to index coordinates (y, x) and vice versa. These functions are tested trivially by ensuring they produce the correct conversions.
+
+## Integration tests
+
+Tbe Ai's functionality is also tested with integration tests. These tests are defined in the test_integration.py file. These tests mainly test the combined functinoality of Engine and Ai. The test cases commonly originate from blunders that occur in manual testing, such as accuracy tests.
 
 # Test coverage
 on 8.12.2023 test branch coverage of tested files is 95%.
