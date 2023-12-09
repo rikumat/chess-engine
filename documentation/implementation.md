@@ -55,3 +55,6 @@ classDiagram
   Engine: make_move()
   Engine: self.board
   ```
+# Square values
+The ai uses several matrices to calculate values for preferred positions. These values can be found in the multiplier_matrices.py file. Each piece has it's own matrix, which is used to alter evaluation depending on the piece's location on the board.
+
