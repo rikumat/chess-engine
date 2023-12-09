@@ -62,4 +62,4 @@ The ai uses several matrices to calculate values for preferred positions. These 
 
 ![pawn matrix](./images/pawn_matrix.png)
 
-The previous image is the value matrix applied for white pawns. This means if a pawn is moved from e2 to e4, it's value gets multiplied by 1.041, giving additional 0.41 points in the evaluation function. The values double every row, to encourage piece development towards the opposite side.
+The previous image is the value matrix applied for white pawns. This means if a pawn is moved from e2 to e4, it's value gets multiplied by 1.041, giving additional 0.41 points in the evaluation function. The values double every row, to encourage piece development towards the opposite side. This method values promoting one pawn higher than multiple pawns to lower rows.
