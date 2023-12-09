@@ -11,7 +11,7 @@ The unittests of this class test, whether the algorithm reacts to selected game 
 Unittests for this class test that the board gets updated correctly when a move is made. 
 
 ### Board
-Unittests for this class are comprehensive, and test that all the methods of the class find all legal moves. This is tested by obstructing piece's paths with own and opponent's pieces to ensure it doesn't allow moving through material.
+Unittests for this class are comprehensive, and test that all the methods of the class find all legal moves. This is tested by obstructing pieces' paths with own and opponent's pieces to ensure it doesn't allow moving through material.
 
 ### Utils
 
