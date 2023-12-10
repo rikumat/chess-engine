@@ -45,21 +45,6 @@ class TestAi(unittest.TestCase):
         move = self.ai.calculate_move(test_board, True)
         self.assertEqual(move, "d2h6")
 
-    def test_ai_notices_promotion(self):
-        test_board = [
-            ["k", ".", ".", ".", ".", ".", ".", "."],
-            [".", "R", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "K"],
-            [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", "B", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", "r", "."],
-            ["p", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."]
-        ]
-        move = self.ai.calculate_move(test_board, False)
-        self.assertEqual(move, "a2a1")
-
-
     def test_ai_notices_blunder(self):
         test_board = [
             ["r", ".", "b", ".", "k", "b", "n", "r"],
@@ -71,6 +56,21 @@ class TestAi(unittest.TestCase):
             ["P", "P", ".", ".", "B", "P", "P", "P"],
             ["R", "N", ".", ".", "K", ".", "N", "R"]
         ]
-
         move = self.ai.calculate_move(test_board, False)
         self.assertEqual(move, "f6g5")
+
+    def test_ai_notices_promotion(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", "R", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", "B", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", "r", "."],
+            ["p", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+        move = self.ai.calculate_move(test_board, False)
+        self.assertEqual(move, "a2a1")
+
+

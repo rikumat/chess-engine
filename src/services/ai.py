@@ -1,8 +1,8 @@
 from datetime import datetime
-from multiplier_matrices import multiplier_matrices
+from location_values import location_values
 from entities.board import Board
 from math import sqrt
-
+bias=0.5
 import utils
 
 generator = Board()
@@ -13,13 +13,11 @@ values = {
     "n":-30,
     "b":-30,
     "p":-10,
-    "Q": 90,
-    "R": 50,
-    "N":30,
-    "B":30,
-    "P":10,
-    " ":0,
-    "\n":0,
+    "Q": 90+bias,
+    "R": 50+bias,
+    "N":30+bias,
+    "B":30+bias,
+    "P":10+bias,
 }
 letter_to_number = {
     "a":0,
@@ -46,8 +44,12 @@ class Ai():
         for i, row in enumerate(board):
             for j, piece in enumerate(row):
                 if piece.lower()!="k":
-                    add = multiplier_matrices[piece][i][j]*values[piece]
-                    balance+=add
+                    balance += values[piece]
+                    if piece.islower():
+                        balance -= location_values[piece][i][j]
+                        continue
+                    balance+=location_values[piece][i][j]
+
         return round(balance, 5)
 
     def evaluate(self, board, game_data):
@@ -56,46 +58,7 @@ class Ai():
         Positive valuation means advantage for white,
         negative means advantage for black.
         """
-        value = round(game_data["balance"], 4)
-        return value
-
-        balance = self.calculate_balance(board)
-        # if round(balance, 4) != round(game_data["balance"], 4):
-            # print("________")
-
-            # print(self.calculate_balance(board))
-            # print(round(self.calculate_balance(board), 4))
-
-            # print(game_data["balance"])
-            # print(round(game_data["balance"], 4))
-
-            # print("___________")
-
-        return self.calculate_balance(board)
-        value=0
-
-        ai_king = utils.square_to_coordinates(game_data["ai_king"])
-        player_king = utils.square_to_coordinates(game_data["player_king"])
-
-        player_distance_to_king=0
-        ai_distance_to_king=0
-
-        for i, row in enumerate(board):
-            for j, piece in enumerate(row):
-
-                value+=values[piece]
-
-                if piece.islower() and piece != ".":
-                    ai_distance_to_king+=sqrt((i-player_king[0])**2+(j-player_king[1])**2)
-
-                elif not piece.islower() and piece != ".":
-                    player_distance_to_king+=sqrt((i-ai_king[0])**2+(j-ai_king[1])**2)
-        if game_data["balance"] != value:
-            print(game_data["balance"])
-            print(value)
-        value+=(5/player_distance_to_king)*10
-        value-=(5/ai_distance_to_king)*10
-
+        value = round(game_data["balance"], 5)
         return value
 
     def calculate_move(self, board, white):
@@ -166,10 +129,6 @@ class Ai():
                     board[coords_start[0]][coords_start[1]]="Q"
                     current_piece_after="Q"
 
-                multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-                multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
-                multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
-
                 if piece_taken=="k":
                     game_data["winner"]=1
 
@@ -178,15 +137,17 @@ class Ai():
 
                 balance_change=0
                 if piece_taken!="k":
-                    balance_change-=values[piece_taken]*multiplier_opponent
+                    balance_change-=values[piece_taken]
+                    balance_change+=location_values[piece_taken][coords_end[0]][coords_end[1]]
 
-                if current_piece !="K":
-                    balance_change-=values[current_piece]*multiplier_own
-                    balance_change+=values[current_piece_after]*multiplier_own_after
+                if current_piece!="K":
+                    balance_change-=location_values[current_piece][coords_start[0]][coords_start[1]]
+                    balance_change+=location_values[current_piece_after][coords_end[0]][coords_end[1]]
                 
-
                 game_data["balance"]+=round(balance_change, 4)
+
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
+
                 game_data["winner"]=0
 
                 game_data["balance"]-=balance_change
@@ -230,20 +191,16 @@ class Ai():
                 board[coords_start[0]][coords_start[1]]="q"
                 current_piece_after="q"
 
-            multiplier_own = multiplier_matrices[current_piece][coords_start[0]][coords_start[1]]
-            multiplier_own_after = multiplier_matrices[current_piece_after][coords_end[0]][coords_end[1]]
-            multiplier_opponent = multiplier_matrices[piece_taken][coords_end[0]][coords_end[1]]
-
             board[coords_end[0]][coords_end[1]]=board[coords_start[0]][coords_start[1]]
             board[coords_start[0]][coords_start[1]]="."
 
             balance_change=0
             if piece_taken!="K":
-                balance_change-=values[piece_taken]*multiplier_opponent
-            
-            if current_piece !="k":
-                balance_change-=values[current_piece]*multiplier_own
-                balance_change+=values[current_piece_after]*multiplier_own_after
+                balance_change-=values[piece_taken]
+                balance_change-=location_values[piece_taken][coords_end[0]][coords_end[1]]
+            if current_piece!="k":
+                balance_change+=location_values[current_piece][coords_start[0]][coords_start[1]]
+                balance_change-=location_values[current_piece_after][coords_end[0]][coords_end[1]]
 
             game_data["balance"]+=round(balance_change, 4)
 

@@ -1,5 +1,4 @@
 import copy
-from multiplier_matrices import multiplier_matrices
 from itertools import chain
 import unittest
 from entities.board import Board

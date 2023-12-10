@@ -1,5 +1,8 @@
 import utils
-from multiplier_matrices import multiplier_matrices
+from location_values import location_values
+
+bias=0.5
+
 move_priority = {
     "p": 15,
     "n":10,
@@ -10,7 +13,13 @@ move_priority = {
 }
 
 values = {
-    "k": 10**10,
+    "K": 10**10,
+    "Q": 90+bias,
+    "R": 50+bias,
+    "N":30+bias,
+    "B":30+bias,
+    "P":10+bias,
+    "K": 10**10,
     "q": 90,
     "r": 50,
     "n":30,
@@ -254,11 +263,16 @@ class Board():
             if taken.lower()=="k":
                 return 10**15
 
-            if taken!=".":
-                return round(values[taken.lower()]*multiplier_matrices[taken][coords_end[0]][coords_start[1]], 5)
-
+            if taken!="." and own.lower()!="k":
+                value+=values[taken]
+                value+=location_values[taken][coords_end[0]][coords_end[1]]
+                value+=location_values[own][coords_end[0]][coords_end[1]]
+                value-=location_values[own][coords_start[0]][coords_start[1]]
+                return value
+            
             if own.lower()!="k":
-                return round(values[own.lower()]*multiplier_matrices[own][coords_end[0]][coords_end[1]]-values[own.lower()]*multiplier_matrices[own][coords_start[0]][coords_start[1]], 5)
+                value += location_values[own][coords_end[0]][coords_end[1]]
+                value -= location_values[own][coords_start[0]][coords_start[1]]
 
             return -1
 
