@@ -73,4 +73,19 @@ class TestAi(unittest.TestCase):
         move = self.ai.calculate_move(test_board, False)
         self.assertEqual(move, "a2a1")
 
+    def test_ai_prevents_promotion(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", "r", "."],
+            [".", ".", ".", ".", "R", ".", ".", "P"],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", "N", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+
+        move = self.ai.calculate_move(test_board, False)
+        self.assertEqual(move, "g8c8")
+
 

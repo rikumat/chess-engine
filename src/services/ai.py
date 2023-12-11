@@ -2,7 +2,7 @@ from datetime import datetime
 from location_values import location_values
 from entities.board import Board
 from math import sqrt
-bias=0.5
+bias=0
 import utils
 
 generator = Board()
