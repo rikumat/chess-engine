@@ -65,7 +65,6 @@ class Ai():
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function."""
         cached_moves = {}
-        cached_order={}
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
         game_data["winner"]=0
@@ -73,16 +72,15 @@ class Ai():
         value, move = 0, 0
         for i in range(4, 15):
                 start_time = datetime.now()
-                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_order, cached_moves)
-                print("calculated depth {}".format(i), end="\n", flush=True)
+                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_moves)
+                print((datetime.now()-start_time).total_seconds(), end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
-        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 6, white, cached_order, cached_moves)
 
         print(value)
         return move
 
-    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
+    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, memo):
         """
         This function uses minimax algorithm with alpha beta pruning
         to calculate the best possible move
@@ -101,17 +99,19 @@ class Ai():
 
         board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
         transposition_key=board_key+"|"+str(depth)
-        first_move = move_dict.get(board_key)
+        first_move = memo.get(board_key)
         cached_move = memo.get(transposition_key)
 
-        if cached_move != None:
-            return cached_move
+        if cached_move != None and cached_move[2]==0:
+            return (cached_move[0], cached_move[1])
 
         if maximizing:
+            if cached_move!= None:
+                alpha = max(alpha, cached_move[0])
             best_move=None
             max_eval=-10**15
             moves = generator.get_moves_from_board(board, True)
-
+            broken=False
             if first_move!=None and moves[-1]!=first_move:
                 moves.append(first_move)
 
@@ -146,7 +146,7 @@ class Ai():
                 
                 game_data["balance"]+=round(balance_change, 4)
 
-                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
+                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, memo)
 
                 game_data["winner"]=0
 
@@ -162,14 +162,22 @@ class Ai():
                 max_eval = max(evaluation, max_eval)
 
                 if alpha >= beta:
+                    memo[transposition_key]=(evaluation, best_move, 1)
+                    broken=True
                     break
             
-            move_dict[board_key]=best_move
-            memo[transposition_key]=(max_eval, best_move)
+            memo[board_key]=best_move
+
+            if not broken:
+                memo[transposition_key]=(max_eval, best_move, 0)
+
             return max_eval, best_move
 
+        if cached_move!= None:
+            beta = min(beta, cached_move[0])
         min_eval = 10**15
         best_move=None
+        broken=False
 
         moves = generator.get_moves_from_board(board, False)
         if first_move!=None and moves[-1]!=first_move:
@@ -204,7 +212,7 @@ class Ai():
 
             game_data["balance"]+=round(balance_change, 4)
 
-            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
+            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, memo)
 
             game_data["winner"]=0
 
@@ -219,10 +227,15 @@ class Ai():
                 best_move=move
 
             min_eval = min(min_eval, evaluation)
+
             if beta <= alpha:
+                memo[transposition_key]=(min_eval, best_move, 1)
+                broken=True
                 break
 
-        move_dict[board_key]=best_move
-        memo[transposition_key]=(min_eval, best_move)
+        memo[board_key]=best_move
+
+        if not broken:
+            memo[transposition_key]=(min_eval, best_move, 0)
 
         return min_eval, best_move
