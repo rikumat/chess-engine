@@ -1,8 +1,9 @@
+
 from datetime import datetime
 from location_values import location_values
 from entities.board import Board
 from math import sqrt
-bias=0.5
+bias=0
 import utils
 
 generator = Board()
@@ -68,26 +69,27 @@ class Ai():
         cached_order={}
         game_data = {}
         game_data["balance"] = self.calculate_balance(board)
+        game_data["balance"]=0
         game_data["winner"]=0
         print(round(4.111111, 4))
         value, move = 0, 0
         for i in range(4, 15):
                 start_time = datetime.now()
-                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_order, cached_moves)
-                print("calculated depth {}".format(i), end="\n", flush=True)
+                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_order, cached_moves, False)
+                print("calculate depth {}".format(i), end="\n", flush=True)
                 if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                     break
-        value, move = self.alphabeta(board, -10**15, 10**15, game_data, 6, white, cached_order, cached_moves)
 
         print(value)
         return move
 
-    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo):
+    def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, move_dict, memo, null_allowed):
         """
         This function uses minimax algorithm with alpha beta pruning
         to calculate the best possible move
         from a given chessboard.
         """
+
         player_number={
             True: "1",
             False: "0"
@@ -99,7 +101,9 @@ class Ai():
         if depth==0:
             return self.evaluate(board, game_data), None
 
-        board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
+        board_key="".join(["".join(x) for x in board])+player_number[maximizing]
+
+
         transposition_key=board_key+"|"+str(depth)
         first_move = move_dict.get(board_key)
         cached_move = memo.get(transposition_key)
@@ -110,6 +114,11 @@ class Ai():
         if maximizing:
             best_move=None
             max_eval=-10**15
+            if depth>=3 and null_allowed:
+                evaluation, next_move = self.alphabeta(board, beta-1, beta, game_data, depth-2, False, move_dict, memo, False)
+                if evaluation>=beta:
+                    return beta, None
+
             moves = generator.get_moves_from_board(board, True)
 
             if first_move!=None and moves[-1]!=first_move:
@@ -146,7 +155,7 @@ class Ai():
                 
                 game_data["balance"]+=round(balance_change, 4)
 
-                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo)
+                evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, move_dict, memo, True)
 
                 game_data["winner"]=0
 
@@ -170,6 +179,10 @@ class Ai():
 
         min_eval = 10**15
         best_move=None
+        if depth >=3 and null_allowed:
+            evaluation, next_move = self.alphabeta(board, alpha, alpha+1, game_data, depth-2, False, move_dict, memo, False)
+            if evaluation<=alpha:
+                return alpha, None
 
         moves = generator.get_moves_from_board(board, False)
         if first_move!=None and moves[-1]!=first_move:
@@ -204,7 +217,7 @@ class Ai():
 
             game_data["balance"]+=round(balance_change, 4)
 
-            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo)
+            evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, move_dict, memo, True)
 
             game_data["winner"]=0
 
