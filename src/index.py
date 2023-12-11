@@ -43,6 +43,7 @@ while True:
 
     revert_move = move[2:]+move[:2]
     result = chess_engine.make_move(move)
+
     if result is True:
         ai_move = ai.calculate_move(chess_engine.board, False)
         revert_ai_move=ai_move[2:]+ai_move[:2]

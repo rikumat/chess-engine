@@ -1,7 +1,7 @@
 import utils
 from location_values import location_values
 
-bias=0
+bias=0.5
 
 move_priority = {
     "p": 15,
