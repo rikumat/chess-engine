@@ -16,7 +16,7 @@ This class is responsible for calculating a move in response to the user's move.
 
 Utils is a file of utility functions. Currently there are 2 functions in this file: coordinates_to_square and square_to_coordinates, which help conversions between chess moves and coordinates that can be used to access the matrix that represents the chess board.
 
-## sequence diagram of user's move and ai's response. (after board class is integrated to Ai)
+## sequence diagram of user's move and ai's response.
 
 
 ```mermaid
@@ -58,3 +58,8 @@ classDiagram
 # Square values
 The ai uses several matrices to calculate values for preferred positions. These values can be found in the multiplier_matrices.py file. Each piece has it's own matrix, which is used to alter evaluation depending on the piece's location on the board.
 
+## Pawn matrix
+
+![pawn matrix](./images/pawn_matrix.png)
+
+The previous image is the value matrix applied for white pawns. This means if a pawn is moved from e2 to e4, it's value gets multiplied by 1.041, giving additional 0.41 points in the evaluation function. The values double every row, to encourage piece development towards the opposite side. This method values promoting one pawn higher than multiple pawns to lower rows.
