@@ -66,7 +66,7 @@ class Ai():
         and returns the best possible move according to the alphabeta function."""
         cached_moves = {}
         game_data = {}
-        game_data["balance"] = self.calculate_balance(board)
+        game_data["balance"] = 0
         game_data["winner"]=0
         print(round(4.111111, 4))
         value, move = 0, 0
