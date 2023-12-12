@@ -2,18 +2,18 @@ from entities.board import Board
 from datetime import datetime
 
 board = Board()
-test_board = [
-            ["r", "n", "b", "q", "k", "b", "n", "r"],
-            ["p", "p", "p", "p", "p", "p", "p", "p"],
+empty_board = [
+            [".", ".", ".", ".", ".", ".", ".", "Q"],
             [".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", "Q", ".", ".", ".", ".", ".", "."],
             [".", ".", ".", ".", "Q", ".", ".", "."],
             [".", ".", ".", ".", ".", ".", ".", "."],
-            ["P", "P", "P", "P", "P", "P", "P", "P"],
-            ["R", "N", "B", ".", "K", "B", "N", "R"]
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", "Q", ".", "Q", ".", ".", "Q", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."]
         ]
 
 start_time = datetime.now()
-for i in range(1000000):
-    moves = board.get_diagonal_moves(test_board, "e4")
+for i in range(100000):
+    moves = board.get_moves_from_board(empty_board, True)
 print((datetime.now()-start_time).total_seconds())
