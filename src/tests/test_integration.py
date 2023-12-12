@@ -58,20 +58,20 @@ class TestIntegration(unittest.TestCase):
         move = ai.calculate_move(test_board, False)
         self.assertEqual(move, "d6c7")
 
-    # def test_ai_notices_blunder_4(self):
-    #     empty_board = [
-    #         [".", "K", ".", "R", ".", ".", ".", "R"],
-    #         ["P", "P", "P", ".", ".", "P", "P", "P"],
-    #         [".", ".", "B", ".", ".", ".", ".", "."],
-    #         [".", ".", ".", ".", ".", ".", ".", "."],
-    #         [".", ".", ".", ".", "q", ".", ".", "."],
-    #         [".", ".", ".", ".", ".", ".", ".", "."],
-    #         ["p", "p", "p", ".", ".", ".", "p", "p"],
-    #         ["r", ".", "b", "k", ".", ".", ".", "r"]
-    #     ]
-    #     test_board = [x[::-1] for x in empty_board[::-1]]
-    #     engine = Engine(test_board)
-    #     move = ai.calculate_move(engine.board, False)
-    #     self.assertEqual(move, "d5e6")
+    def test_ai_notices_blunder_4(self):
+        empty_board = [
+            [".", "K", ".", "R", ".", ".", ".", "R"],
+            ["P", "P", "P", ".", ".", "P", "P", "P"],
+            [".", ".", "B", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", "q", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            ["p", "p", "p", ".", ".", ".", "p", "p"],
+            ["r", ".", "b", "k", ".", ".", ".", "r"]
+        ]
+        test_board = [x[::-1] for x in empty_board[::-1]]
+        engine = Engine(test_board)
+        move = ai.calculate_move(engine.board, False)
+        self.assertEqual(move, "d5e6")
 
         
