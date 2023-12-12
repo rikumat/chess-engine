@@ -50,7 +50,7 @@ class Ai():
                         continue
                     balance+=location_values[piece][i][j]
 
-        return round(balance, 5)
+        return round(balance, 3)
 
     def evaluate(self, board, game_data):
         """

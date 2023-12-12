@@ -268,12 +268,12 @@ class Board():
                 value+=location_values[taken][coords_end[0]][coords_end[1]]
                 value+=location_values[own][coords_end[0]][coords_end[1]]
                 value-=location_values[own][coords_start[0]][coords_start[1]]
-                return value
+                return round(value, 3)
             
             if own.lower()!="k":
                 value += location_values[own][coords_end[0]][coords_end[1]]
                 value -= location_values[own][coords_start[0]][coords_start[1]]
-
+                return round(value, 3)
             return -1
 
         for i, row in enumerate(board):
