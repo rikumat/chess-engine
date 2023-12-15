@@ -1,11 +1,9 @@
 from datetime import datetime
 from location_values import location_values
-from entities.board import Board
-from math import sqrt
+
 bias=0
 import utils
 
-generator = Board()
 values = {
     ".":0,
     "q": -90,
@@ -35,10 +33,15 @@ number_to_letter = {number:letter for letter, number in letter_to_number.items()
 
 class Ai():
     """This class is responsible for calculating a chess move given an arbitrary position."""
-    def __init__(self):
-        pass
+    def __init__(self, move_generator):
+        self.move_generator = move_generator
 
     def calculate_balance(self, board):
+        """
+        This method takes a chessboard as an argument and returns the material balance
+        Where 0 is equal position, negative number indicates black's advantage and positive
+        the advantage of white.
+        """
         balance=0
 
         for i, row in enumerate(board):
@@ -51,7 +54,7 @@ class Ai():
                     balance+=location_values[piece][i][j]
 
         return round(balance, 3)
-
+    
     def evaluate(self, board, game_data):
         """
         This function numerically evaluates a chess board. 
@@ -63,21 +66,26 @@ class Ai():
 
     def calculate_move(self, board, white):
         """This function takes a chessboard as an argument, 
-        and returns the best possible move according to the alphabeta function."""
+        and returns the best possible move according to the alphabeta function.
+        Prints are here to confirm something is happening.
+        """
         cached_moves = {}
         game_data = {}
         game_data["balance"] = 0
         game_data["winner"]=0
-        print(round(4.111111, 4))
         value, move = 0, 0
+        previous_move=None
         for i in range(4, 15):
-                start_time = datetime.now()
-                value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_moves)
-                print((datetime.now()-start_time).total_seconds(), end="\n", flush=True)
-                if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
-                    break
-
-        print(value)
+            start_time = datetime.now()
+            value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_moves)
+            if previous_move==None or previous_move==move:
+                print("computer found best move {} calculating {} moves ahead".format(move, i))
+                previous_move=move
+            else:
+                print("computer found better move {} calculating {} moves ahead".format(move, i))
+                previous_move=move
+            if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
+                break
         return move
 
     def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, memo):
@@ -86,6 +94,7 @@ class Ai():
         to calculate the best possible move
         from a given chessboard.
         """
+
         player_number={
             True: "1",
             False: "0"
@@ -110,7 +119,7 @@ class Ai():
                 alpha = max(alpha, cached_move[0])
             best_move=None
             max_eval=-10**15
-            moves = generator.get_moves_from_board(board, True)
+            moves = self.move_generator.get_moves_from_board(board, True)
             broken=False
             if first_move!=None and moves[-1]!=first_move:
                 moves.append(first_move)
@@ -142,6 +151,8 @@ class Ai():
 
                 if current_piece!="K":
                     balance_change-=location_values[current_piece][coords_start[0]][coords_start[1]]
+                    balance_change+=values[current_piece_after]
+                    balance_change-=values[current_piece]
                     balance_change+=location_values[current_piece_after][coords_end[0]][coords_end[1]]
                 
                 game_data["balance"]+=round(balance_change, 4)
@@ -179,7 +190,7 @@ class Ai():
         best_move=None
         broken=False
 
-        moves = generator.get_moves_from_board(board, False)
+        moves = self.move_generator.get_moves_from_board(board, False)
         if first_move!=None and moves[-1]!=first_move:
             moves.append(first_move)
 
@@ -206,7 +217,10 @@ class Ai():
             if piece_taken!="K":
                 balance_change-=values[piece_taken]
                 balance_change-=location_values[piece_taken][coords_end[0]][coords_end[1]]
+
             if current_piece!="k":
+                balance_change+=values[current_piece_after]
+                balance_change-=values[current_piece]
                 balance_change+=location_values[current_piece][coords_start[0]][coords_start[1]]
                 balance_change-=location_values[current_piece_after][coords_end[0]][coords_end[1]]
 

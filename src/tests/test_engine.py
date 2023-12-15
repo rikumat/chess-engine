@@ -1,5 +1,11 @@
 import unittest
 from services.engine import Engine
+from services.move_generator import MoveGenerator
+from services.ai import Ai
+
+move_generator = MoveGenerator()
+ai = Ai(move_generator)
+
 
 class TestEngine(unittest.TestCase):
     def setUp(self):
@@ -16,7 +22,7 @@ class TestEngine(unittest.TestCase):
             [".", ".", ".", ".", ".", ".", ".", "p"],
             [".", ".", ".", ".", ".", ".", ".", "."]
         ]
-        engine = Engine(test_board)
+        engine = Engine(ai, move_generator, test_board)
         engine.make_move("a7a8")
         self.assertEqual(engine.board[0][0], "Q")
         engine.make_move("h2h1")
