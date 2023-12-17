@@ -22,27 +22,32 @@ This class is responsible for calculating the best move from a given chessboard 
 
 Utils is a file of utility functions. Currently there are 2 functions in this file: coordinates_to_square and square_to_coordinates, which help conversions between chess moves and coordinates that can be used to access the matrix that represents the chess board.
 
-## sequence diagram of user's move and ai's response.
+## sequence diagram of user's move and ai's response. where player's move is legal, and neither move results in checkmate.
 
 
 ```mermaid
 sequenceDiagram
   actor User
-  participant Index
   participant Engine
   participant Ai
   participant Board
 
-User ->> Index:input e2e4
-Index ->> Engine: engine.make_move("e2e4")
-Engine -->> Index: True
-Index ->> Ai: Ai.calculate_move(board matrix, False)
-loop on every recursive Alphabeta call
-  Ai ->> Board: Board.get_moves_from_board(board, False)
-  Board -->> Ai: list of moves
-    end
-Ai -->> Index: "b8c6"
-Index -->> User: output b8c6
+  User ->> Engine: input("e2e4")
+  Engine ->> Engine: move_is_legal("e2e4", True)
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+  Ai -->> Engine: 30
+  Engine -->> Engine: True
+  Engine ->> Engine: make_move("e2e4", True)
+  Engine ->> Engine: check_end_condition(True)
+  Engine -->> Engine: False
+  Engine ->> Ai: calculate_move(self.board, False)
+  Ai -->> Engine: "d5d7"
+  Engine ->> Engine: check_end_condition(False)
+  Engine -->> Engine: False
+  
+  
+  
+  
   ```
 
 ## class diagram
