@@ -3,14 +3,20 @@
 ## Classes
 This project is divided into 3 classes: Ai, Board and Engine.
 
-### Board
-This class is responsible for generating legal moves. This class is used solely by The Ai class. Board's only interface to outside modules is the .get_moves_from_board method, which takes board and player's color as argument. 
+### MoveGenerator
+This class is responsible for generating legal moves. This class is used solely by both the Ai and Engine classes. Ai uses MoveGenerator to find legal moves on each minimax level.
 
 ### Engine
-This class is responsible for keeping track of the game state, and verifying the player's moves. this class's game matrix is updated every time Ai's .calculate_move method returns a new move, and when player inputs a valid move.
+This class is the user interface of the game. This class contains all gameloops, and all the code related to user input. This class contains methods for validating user input, and checking move legality. This class also stores the board state, and executes moves chosen by the player and the ai. Instances of Ai and MoveGenerator are injected for an instance of this class. The .run is the entry point of the program, and starts the main gameloop, which takes input from user and Ai. Once this loop is broken, the program exits.
 
 ### Ai
-This class is responsible for calculating a move in response to the user's move. This class is only used in the main gameloop found in index.py. This class's only interface to other modules is the .calculate_move method, which takes a 2-dimensional list (chess board) and players's color as arguments, and returns a move in the same form user inputs their move.
+This class is responsible for calculating the best move from a given chessboard for given color. Methods of this class are only used in the Engine class. The alphabeta function is used to calculate a move, validate move legality, and detect checkmates and stalemates. This is done according to the following logic:
+
+- Checkmate: minimax/alphabeta is called on color x with depth 2 (one own and one opponents move) if the best scenario after these moves results in the color x king being eaten, either stalemate or checkmate has occured. To confirm this is a checkmate, alphabeta is also called on depth 1 with the opposite color, to tell whether the king of color x is currently under attack. If it is, a checkmate has occured.
+
+- Stalemate: if best case scenario in 2 moves starting from color x is the color x king being eaten, but color x king is not currently under attack, a stalemate has occured.
+
+- move legality: after color x has moved, call alphabeta/minimax with the opposite color and depth 1. If this results in color x king being eaten, the move is illegal, as color x didn't get out of check.
 
 ## Utils
 
@@ -56,10 +62,16 @@ classDiagram
   Engine: self.board
   ```
 # Square values
-The ai uses several matrices to calculate values for preferred positions. These values can be found in the multiplier_matrices.py file. Each piece has it's own matrix, which is used to alter evaluation depending on the piece's location on the board.
+The ai uses several matrices to calculate values for preferred positions. These values can be found in the location_values.py file in a dictionary of the same name. These matrices contain values for each square which are added to material balance as long as a specified type of piece is on top of a given square.
 
-## Pawn matrix
 
-![pawn matrix](./images/pawn_matrix.png)
+# Limitations
 
-The previous image is the value matrix applied for white pawns. This means if a pawn is moved from e2 to e4, it's value gets multiplied by 1.041, giving additional 0.41 points in the evaluation function. The values double every row, to encourage piece development towards the opposite side. This method values promoting one pawn higher than multiple pawns to lower rows.
+## Moves
+Currently legal moves don't include castling or en passant. This is due to the fact that the MoveGenerator was built to calculate moves only from the state of the chessboard, while both of these moves need additional information. Castling is only allowed if rook and king haven't been moved yet, and en passant is only allowed for pawns that started by moving 2 squares forward, and haven't been moved since. Allowing these moves would improve the Ai greatly, since it would know to prepare for them, even if it didn't use the moves itself. One option for better user experience is to only allow these moves for the player but not for the Ai. This would be much easier to implement, and wouldn't affect performance.
+
+## Ai draws
+Related to the previous issue, the Ai can't tell apart stalemate and checkmate. This is problematic especially when the Ai has gained a large advantage, since stalemate is increasingly likely. Similarly, the Ai doesn't recognize draw by repetition, which is a common occurence as the Ai always executes the same move in a given state. This can result in the Ai drawing a winning position.
+
+## Gameplay
+Currently the player is always white, and Ai is always black. This also means the player always starts the game. This is something that should be changed in the future, if development of this project continues. This wouldn't demand much work, since the calculate_move method takes color as an argument.
