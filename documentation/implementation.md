@@ -22,6 +22,25 @@ This class is responsible for calculating the best move from a given chessboard 
 
 Utils is a file of utility functions. Currently there are 2 functions in this file: coordinates_to_square and square_to_coordinates, which help conversions between chess moves and coordinates that can be used to access the matrix that represents the chess board.
 
+## class diagram
+```mermaid
+classDiagram
+  Engine<|-- Ai
+  Engine<|-- MoveGenerator
+  Ai <|-- MoveGenerator
+  Index <|-- Engine
+  Index: move_generator = MoveGenerator()
+  Index: ai = Ai(move_generator)
+  Index: engine = Engine(ai, move_generator)
+  Index: engine.run()
+  Engine: self.board = [[...]]
+  Engine: def run()
+  Engine: def move_is_legal(move, is_white)
+  Engine: def make_move(move)
+  Ai: def calculate_move(board, is_white)
+  MoveGenerator: get_moves_from_board(board, is_white)
+  ```
+
 ## sequence diagram of user's move and ai's response. where player's move is legal, and neither move results in checkmate.
 
 
@@ -81,24 +100,6 @@ sequenceDiagram
   Engine ->> Engine: ending_menu('Player', 'checkmate')
   ```
 
-## class diagram
-```mermaid
-classDiagram
-  Engine<|-- Ai
-  Engine<|-- MoveGenerator
-  Ai <|-- MoveGenerator
-  Index <|-- Engine
-  Index: move_generator = MoveGenerator()
-  Index: ai = Ai(move_generator)
-  Index: engine = Engine(ai, move_generator)
-  Index: engine.run()
-  Engine: self.board = [[...]]
-  Engine: def run()
-  Engine: def move_is_legal(move, is_white)
-  Engine: def make_move(move)
-  Ai: def calculate_move(board, is_white)
-  MoveGenerator: get_moves_from_board(board, is_white)
-  ```
 # Square values
 The ai uses several matrices to calculate values for preferred positions. These values can be found in the location_values.py file in a dictionary of the same name. These matrices contain values for each square which are added to material balance as long as a specified type of piece is on top of a given square.
 
