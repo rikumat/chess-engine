@@ -35,19 +35,41 @@ sequenceDiagram
   User ->> Engine: input("e2e4")
   Engine ->> Engine: move_is_legal("e2e4", True)
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
-  Ai -->> Engine: 30
+  Ai -->> Engine: 0
   Engine -->> Engine: True
   Engine ->> Engine: make_move("e2e4", True)
+  Engine -->> User: print(self.board)
   Engine ->> Engine: check_end_condition(True)
   Engine -->> Engine: False
   Engine ->> Ai: calculate_move(self.board, False)
   Ai -->> Engine: "d5d7"
+  Engine ->> Engine: make_move("d5d7", False)
+  Engine -->> User: print(self.board)
   Engine ->> Engine: check_end_condition(False)
   Engine -->> Engine: False
-  
-  
-  
-  
+  ```
+
+
+## sequence diagram where the user checkmates the ai
+
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant Engine
+  participant Ai
+  participant Board
+
+  User ->> Engine: input("a5d8")
+  Engine ->> Engine: move_is_legal("a5d8", True)
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+  Ai -->> Engine: 0
+  Engine -->> Engine: True
+  Engine ->> Engine: make_move("e2e4", True)
+  Engine -->> User: print(self.board)
+  Engine ->> Engine: check_end_condition(True)
+  Engine -->> Engine: 'checkmate'
+  Engine ->> Engine: ending_menu('Player', 'checkmate')
   ```
 
 ## class diagram
