@@ -104,20 +104,6 @@ class Engine():
 
         return True
     
-
-    def editor(self):
-        """
-        while this method is running, the player can use 
-        editor commands to modify the chessboard.
-        """
-        while True:
-            command = input("Enter command: ")
-            if command == "exit":
-                break
-            if len(command)==3:
-                coords = utils.square_to_coordinates(command[1:])
-                self.board[coords[0]][coords[1]]=command[0]
-
     def ending_menu(self, winner, ending):
         if ending=="checkmate":
             print("{} wins by checkmate".format(winner))
