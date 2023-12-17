@@ -66,7 +66,7 @@ class Engine():
     def validate_move(self, move, is_white):
         letters = "abcdefgh"
         numbers = "12345678"
-        valid = move[0] in letters and move[2] in numbers and move[3] in letters and move[4] in numbers
+        valid = move[0] in letters and move[1] in numbers and move[2] in letters and move[3] in numbers
         if len(move) !=4 or not valid:
             return "Invalid move"
 
@@ -74,6 +74,17 @@ class Engine():
             return "Illegal move"
 
         return True
+
+    def print_board(self):
+        board = deepcopy(self.board)
+        letters = "#  A B C D E F G H  #"
+        print(letters, flush=True)
+        for i in range(0, 8):
+            board[i].insert(0, str(8-i)+" ")
+            board[i].append(" " + str(8-i))
+            print(" ".join(board[i]), flush=True)
+        print(letters, flush=True)
+
 
     def make_move(self, move):
         """
@@ -126,8 +137,7 @@ class Engine():
         this method is the main gameloop.
         """
         while True:
-            for i in self.board:
-                print(''.join(i), end="\n", flush=True)
+            self.print_board()
 
             if self.check_end_condition(True):
                 replay = self.ending_menu("Computer", self.check_end_condition(True))
@@ -137,11 +147,10 @@ class Engine():
                 break
 
             move = input("Enter your move: ")
-            if move == "editor":
-                self.editor()
 
             if move == "cancel":
-                self.board = deepcopy(self.previous_state)
+                if self.previous_state!=None:
+                    self.board = deepcopy(self.previous_state)
                 continue
 
             if move == "quit":
@@ -157,8 +166,7 @@ class Engine():
 
             self.make_move(move)
 
-            for i in self.board:
-                print(''.join(i), end="\n", flush=True)
+            self.print_board()
 
             if self.check_end_condition(False):
                 replay = self.ending_menu("Player", self.check_end_condition(False))
