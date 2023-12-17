@@ -1,7 +1,7 @@
 # Implementation
 
 ## Classes
-This project is divided into 3 classes: Ai, Board and Engine.
+This project is divided into 3 classes: Ai, MoveGenerator and Engine. Ai and MoveGenerator are injected to Engine as arguments. Engine is the only class whose methods (.run) are called from Index.
 
 ### MoveGenerator
 This class is responsible for generating pseudo-legal moves. This class is used solely by both the Ai and Engine classes. Ai uses MoveGenerator to find moves on each minimax level. Pseudo-legal moves are partially legal, meaning disallowing moving through material / on top of own pieces, but doesn't check for checks. This means 
@@ -62,13 +62,22 @@ sequenceDiagram
 
   User ->> Engine: input("a5d8")
   Engine ->> Engine: move_is_legal("a5d8", True)
-  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
-  Ai -->> Engine: -10**10
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, False, {})
+  Ai -->> Engine: 30
   Engine -->> Engine: True
   Engine ->> Engine: make_move("e2e4", True)
   Engine -->> User: print(self.board)
+
   Engine ->> Engine: check_end_condition(True)
+
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 2, False, {})
+  Ai -->> Engine: 10**10
+
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, True, {})
+  Ai -->> Engine: 10**10
+
   Engine -->> Engine: 'checkmate'
+
   Engine ->> Engine: ending_menu('Player', 'checkmate')
   ```
 
