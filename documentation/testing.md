@@ -11,7 +11,7 @@ The unittests of this class test, whether the algorithm reacts to selected game 
 Unittests of this class mainly test checkmate, stalemate and illegal move detection. these methods are check_end_condition and move_is_legal. In these tests, both Ai and MoveGenerator are injected to the Engine class. This is because all these checks use Ai's alphabeta method. Additionally, move_is_legal uses MoveGenerator to check whether the given move is included in pseudo-legal moves.
 
 ### MoveGenerator
-Unittests for this class are comprehensive, and test that all the methods of the class find all legal moves. This is tested by obstructing pieces' paths with own and opponent's pieces to ensure it doesn't allow moving through material (pseudo-legal moves). 
+Unittests for this class are comprehensive, and test that all the methods of the class find all legal moves. This is tested by obstructing pieces' paths with own and opponent's pieces to ensure it doesn't allow moving through material or moving on top of pieces of the same color (pseudo-legal moves). 
 
 ### Utils
 
