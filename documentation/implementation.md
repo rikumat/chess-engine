@@ -114,3 +114,9 @@ Related to the previous issue, the Ai can't tell apart stalemate and checkmate. 
 
 ## Gameplay
 Currently the player is always white, and Ai is always black. This also means the player always starts the game. This is something that should be changed in the future, if development of this project continues. This wouldn't demand much work, since the calculate_move method takes color as an argument.
+
+# Sources
+- **Generative AI was not used as a source in the making of this program.**
+- https://www.youtube.com/watch?v=l-hh51ncgDI
+- https://www.chessstrategyonline.com/content/tutorials/basic-chess-concepts-material
+
