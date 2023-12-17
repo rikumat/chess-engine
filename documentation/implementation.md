@@ -4,7 +4,7 @@
 This project is divided into 3 classes: Ai, Board and Engine.
 
 ### MoveGenerator
-This class is responsible for generating legal moves. This class is used solely by both the Ai and Engine classes. Ai uses MoveGenerator to find legal moves on each minimax level.
+This class is responsible for generating pseudo-legal moves. This class is used solely by both the Ai and Engine classes. Ai uses MoveGenerator to find moves on each minimax level. Pseudo-legal moves are partially legal, meaning disallowing moving through material / on top of own pieces, but doesn't check for checks. This means 
 
 ### Engine
 This class is the user interface of the game. This class contains all gameloops, and all the code related to user input. This class contains methods for validating user input, and checking move legality. This class also stores the board state, and executes moves chosen by the player and the ai. Instances of Ai and MoveGenerator are injected for an instance of this class. The .run is the entry point of the program, and starts the main gameloop, which takes input from user and Ai. Once this loop is broken, the program exits.
@@ -48,18 +48,20 @@ Index -->> User: output b8c6
 ## class diagram
 ```mermaid
 classDiagram
-  Index<|-- Ai
-  Ai <|-- Board
+  Engine<|-- Ai
+  Engine<|-- MoveGenerator
+  Ai <|-- MoveGenerator
   Index <|-- Engine
-  Index: player_move = input("Enter your move")
-  Index: engine.make_move(player_move)
-  Index: ai_move = ai.calculate_move(board, False)
-  Index: engine.make_move(ai_move)
-  Index: print(engine.board)
-  Ai: calculate_move()
-  Board: get_moves_from_board()
-  Engine: make_move()
-  Engine: self.board
+  Index: move_generator = MoveGenerator()
+  Index: ai = Ai(move_generator)
+  Index: engine = Engine(ai, move_generator)
+  Index: engine.run()
+  Engine: self.board = [[...]]
+  Engine: def run()
+  Engine: def move_is_legal(move, is_white)
+  Engine: def make_move(move)
+  Ai: def calculate_move(board, is_white)
+  MoveGenerator: get_moves_from_board(board, is_white)
   ```
 # Square values
 The ai uses several matrices to calculate values for preferred positions. These values can be found in the location_values.py file in a dictionary of the same name. These matrices contain values for each square which are added to material balance as long as a specified type of piece is on top of a given square.
