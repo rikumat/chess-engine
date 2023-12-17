@@ -49,11 +49,18 @@ sequenceDiagram
   actor User
   participant Engine
   participant Ai
-  participant Board
+  participant MoveGenerator
 
   User ->> Engine: input("e2e4")
   Engine ->> Engine: move_is_legal("e2e4", True)
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
+
   Ai -->> Engine: 0
   Engine -->> Engine: True
   Engine ->> Engine: make_move("e2e4", True)
@@ -61,6 +68,13 @@ sequenceDiagram
   Engine ->> Engine: check_end_condition(True)
   Engine -->> Engine: False
   Engine ->> Ai: calculate_move(self.board, False)
+
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
+
   Ai -->> Engine: "d5d7"
   Engine ->> Engine: make_move("d5d7", False)
   Engine -->> User: print(self.board)
@@ -82,6 +96,13 @@ sequenceDiagram
   User ->> Engine: input("a5d8")
   Engine ->> Engine: move_is_legal("a5d8", True)
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, False, {})
+
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
+
   Ai -->> Engine: 30
   Engine -->> Engine: True
   Engine ->> Engine: make_move("e2e4", True)
@@ -90,9 +111,19 @@ sequenceDiagram
   Engine ->> Engine: check_end_condition(True)
 
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 2, False, {})
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
   Ai -->> Engine: 10**10
 
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, True, {})
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
   Ai -->> Engine: 10**10
 
   Engine -->> Engine: 'checkmate'
