@@ -21,17 +21,64 @@ class Engine():
         """
         self.move_generator =  move_generator
         self.ai=ai
+        self.starting_position = [x[::] for x in board[::]]
         self.board=board
         self.previous_state=None
 
+    def reset(self):
+        self.board = [x[::] for x in self.starting_position[::]]
+    
+    def move_is_legal(self, move, is_white):
+        if not move in self.move_generator.get_moves_from_board(self.board, is_white):
+            return False
+
+        checkmate_value={
+            False: 10**10,
+            True: -10**10
+        }
+
+        original_board = deepcopy(self.board)
+        self.make_move(move)
+        value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+        self.board=deepcopy(original_board)
+
+        return not value == checkmate_value[is_white]
+
+    def check_end_condition(self, is_white):
+        """
+        returns 'checkmate' if player has been checkmated, 'stalemate' if the game is in stalemate, False otherwise.
+        """
+        checkmate_value={
+            False: 10**10,
+            True: -10**10
+        }
+        eating_value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+        move_value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 2, is_white, {})
+
+        if eating_value != checkmate_value[is_white] and move_value==checkmate_value[is_white]:
+            return "stalemate"
+
+        if move_value==checkmate_value[is_white]:
+            return "checkmate"
+
+        return False
+
+    def validate_move(self, move, is_white):
+        letters = "abcdefgh"
+        numbers = "12345678"
+        valid = move[0] in letters and move[2] in numbers and move[3] in letters and move[4] in numbers
+        if len(move) !=4 or not valid:
+            return "Invalid move"
+
+        if not self.move_is_legal(move, is_white):
+            return "Illegal move"
+
+        return True
 
     def make_move(self, move):
         """
         This function takes a move as an argument, and updates self.board.
         """
-
-        if len(move)!=4:
-            return "Invalid move"
 
         start = utils.square_to_coordinates(move[:2])
         end=utils.square_to_coordinates(move[2:])
@@ -45,6 +92,7 @@ class Engine():
         self.board[start[0]][start[1]]="."
 
         return True
+    
 
     def editor(self):
         """
@@ -59,6 +107,20 @@ class Engine():
                 coords = utils.square_to_coordinates(command[1:])
                 self.board[coords[0]][coords[1]]=command[0]
 
+    def ending_menu(self, winner, ending):
+        if ending=="checkmate":
+            print("{} wins by checkmate".format(winner))
+        else:
+            print("Draw by stalemate")
+
+        while True:
+            replay = input("Do you want to play another game? y/n")
+            if replay=="y":
+                return True
+            if replay=="n":
+                return False
+            print("Invalid choice")
+
     def run(self):
         """
         this method is the main gameloop.
@@ -66,6 +128,13 @@ class Engine():
         while True:
             for i in self.board:
                 print(''.join(i), end="\n", flush=True)
+
+            if self.check_end_condition(True):
+                replay = self.ending_menu("Computer", self.check_end_condition(True))
+                if replay:
+                    self.reset()
+                    continue
+                break
 
             move = input("Enter your move: ")
             if move == "editor":
@@ -78,22 +147,30 @@ class Engine():
             if move == "quit":
                 break
 
-            if not move in self.move_generator.get_moves_from_board(self.board, True):
-                print("Warning: illegal move!")
-            
             self.previous_state=deepcopy(self.board)
+            
+            result = self.validate_move(move, True)
 
-            result = self.make_move(move)
+            if result != True:
+                print(result)
+                continue
+
+            self.make_move(move)
+
             for i in self.board:
                 print(''.join(i), end="\n", flush=True)
 
-            if result is True:
-                ai_move = self.ai.calculate_move(self.board, False)
-                print("computer moves {}".format(ai_move))
-                self.make_move(ai_move)
-            else:
-                print(result)
-                
+            if self.check_end_condition(False):
+                replay = self.ending_menu("Player", self.check_end_condition(False))
+                if replay: 
+                    self.reset()
+                    continue
+                break
+
+            value, ai_move = self.ai.calculate_move(self.board, False)
+            print("computer moves {}".format(ai_move))
+            self.make_move(ai_move)
+
 
 
 

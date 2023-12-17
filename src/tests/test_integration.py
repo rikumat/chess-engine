@@ -23,7 +23,7 @@ class TestIntegration(unittest.TestCase):
                 ["K", ".", ".", ".", ".", ".", ".", "."]
             ]
         engine = Engine(ai, move_generator, test_board)
-        move = ai.calculate_move(engine.board, False)
+        value, move = ai.calculate_move(engine.board, False)
         self.assertEqual(move, "h2h1")
         engine.make_move(move)
         self.assertEqual(engine.board[6][7], ".")
@@ -56,7 +56,7 @@ class TestIntegration(unittest.TestCase):
             [".", ".", ".", ".", ".", ".", ".", "K"]
         ]
         engine = Engine(ai, move_generator, test_board)
-        move = ai.calculate_move(test_board, False)
+        value, move = ai.calculate_move(test_board, False)
         self.assertEqual(move, "d6c7")
 
     def test_ai_notices_blunder_4(self):
@@ -72,7 +72,7 @@ class TestIntegration(unittest.TestCase):
         ]
         test_board = [x[::-1] for x in empty_board[::-1]]
         engine = Engine(ai, move_generator, test_board)
-        move = ai.calculate_move(engine.board, False)
+        value, move = ai.calculate_move(engine.board, False)
         self.assertEqual(move, "d5e6")
     
     def test_ai_notices_blunder_4(self):
@@ -88,7 +88,7 @@ class TestIntegration(unittest.TestCase):
         ]
         test_board = [x[::-1] for x in empty_board[::-1]]
         engine = Engine(ai, move_generator, test_board)
-        move = ai.calculate_move(engine.board, False)
+        value, move = ai.calculate_move(engine.board, False)
         self.assertEqual(move, "d5e6")
 
     def test_ai_notices_blunder_5(self):
@@ -103,7 +103,7 @@ class TestIntegration(unittest.TestCase):
                 [".", ".", ".", ".", ".", ".", ".", "."]
             ]
         test_board= [x[::-1] for x in test_board[::-1]]
-        move = ai.calculate_move(test_board, False)
+        value, move = ai.calculate_move(test_board, False)
         self.assertIn(move, ["d7e7", "b5e5"])
 
         

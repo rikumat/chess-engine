@@ -67,26 +67,18 @@ class Ai():
     def calculate_move(self, board, white):
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function.
-        Prints are here to confirm something is happening.
         """
         cached_moves = {}
         game_data = {}
         game_data["balance"] = 0
         game_data["winner"]=0
         value, move = 0, 0
-        previous_move=None
         for i in range(4, 15):
             start_time = datetime.now()
             value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_moves)
-            if previous_move==None or previous_move==move:
-                print("computer found best move {} calculating {} moves ahead".format(move, i))
-                previous_move=move
-            else:
-                print("computer found better move {} calculating {} moves ahead".format(move, i))
-                previous_move=move
             if (datetime.now()-start_time).total_seconds()>=3 and i>=6:
                 break
-        return move
+        return value, move
 
     def alphabeta(self, board, alpha, beta, game_data, depth, maximizing, memo):
         """
@@ -183,9 +175,10 @@ class Ai():
                 memo[transposition_key]=(max_eval, best_move, 0)
 
             return max_eval, best_move
-
-        if cached_move!= None:
+        
+        if cached_move!= None: 
             beta = min(beta, cached_move[0])
+
         min_eval = 10**15
         best_move=None
         broken=False
