@@ -63,7 +63,7 @@ sequenceDiagram
   User ->> Engine: input("a5d8")
   Engine ->> Engine: move_is_legal("a5d8", True)
   Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
-  Ai -->> Engine: 0
+  Ai -->> Engine: -10**10
   Engine -->> Engine: True
   Engine ->> Engine: make_move("e2e4", True)
   Engine -->> User: print(self.board)
