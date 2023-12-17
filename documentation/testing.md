@@ -19,7 +19,7 @@ Utils is a utility file containing several helper functions not bound to a class
 
 ## Integration tests
 
-Tbe Ai's functionality is also tested with integration tests. These tests are defined in the test_integration.py file. These tests mainly test the combined functinoality of Engine and Ai. The test cases commonly originate from blunders that occur in manual testing, such as accuracy tests.
+Ai's functionality is also tested with integration tests. These tests are defined in the test_integration.py file. These tests mainly test the combined functinoality of Engine and Ai. The test cases commonly originate from blunders that occur in manual testing, such as accuracy tests. The purpose of these tests is to find the root problem of a serious misplay, fix it, and ensure it doesn't happen again. 
 
 # Test coverage
 on 8.12.2023 test branch coverage of tested files is 95%.
