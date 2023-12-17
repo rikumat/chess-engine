@@ -49,7 +49,6 @@ sequenceDiagram
   actor User
   participant Engine
   participant Ai
-  participant MoveGenerator
 
   User ->> Engine: input("e2e4")
   Engine ->> Engine: move_is_legal("e2e4", True)
@@ -66,14 +65,25 @@ sequenceDiagram
   Engine ->> Engine: make_move("e2e4", True)
   Engine -->> User: print(self.board)
   Engine ->> Engine: check_end_condition(True)
-  Engine -->> Engine: False
-  Engine ->> Ai: calculate_move(self.board, False)
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 2, False, {})
 
   loop During recursion
   Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
   MoveGenerator -->> Ai: [list of moves]
   Ai ->> Ai: Recursive alphabeta call
   end
+  Ai -->> Engine: 0
+
+  Engine ->> Ai: alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, True, {})
+  loop During recursion
+  Ai ->> MoveGenerator: get_moves_from_board(board, is_white)
+  MoveGenerator -->> Ai: [list of moves]
+  Ai ->> Ai: Recursive alphabeta call
+  end
+  Ai -->> Engine: 0
+  Engine -->> Engine: False
+  Engine ->> Ai: calculate_move(self.board, False)
+
 
   Ai -->> Engine: "d5d7"
   Engine ->> Engine: make_move("d5d7", False)
