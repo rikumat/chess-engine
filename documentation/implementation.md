@@ -134,6 +134,8 @@ sequenceDiagram
 # Square values
 The ai uses several matrices to calculate values for preferred positions. These values can be found in the location_values.py file in a dictionary of the same name. These matrices contain values for each square which are added to material balance as long as a specified type of piece is on top of a given square.
 
+# Implemented algorithms
+According to original plan, the final production of Ai uses minimax with alpha-beta pruning. The achieved time-complexity for this is O(2^n), or exponential-time. The space-complexity of this program is O(n), or linear-time. This is the result of storing information about best moves on each level of the recursion. Against the original plan, legal moves are not maintained. Instead, they are generated from a given chessboard for a given color.
 
 # Limitations
 
