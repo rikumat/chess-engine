@@ -1,7 +1,7 @@
 # Implementation
 
 ## Classes
-This project is divided into 3 classes: Ai, MoveGenerator and Engine. Ai and MoveGenerator are injected to Engine as arguments. Engine is the only class whose methods (.run) are called from Index.
+This project is divided into 3 classes: Ai, MoveGenerator and Engine. An instance of MoveGenerator is injected to Ai and Instances of Ai and MoveGenerator are injected to Engine. Engine is the only class whose methods (.run) are called from Index.
 
 ### MoveGenerator
 This class is responsible for generating pseudo-legal moves. This class is used solely by both the Ai and Engine classes. Ai uses MoveGenerator to find moves on each minimax level. Pseudo-legal moves are partially legal, meaning disallowing moving through material / on top of own pieces, but doesn't check for checks. This means 
