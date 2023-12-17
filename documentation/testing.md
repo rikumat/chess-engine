@@ -1,10 +1,10 @@
 # Testing
-Testing of this program is currently limited to unit- and integration tests of components. Currently, there are 3 classes that are tested: Ai, Engine and Board. Additionally, the helper function file utils.py is tested.
+Automated testing of this program is implemented as a mixture of unit- and integration-tests. Because of the complex nature of some of the implemented classes, Unittests are not completely limited to testing of single components, apart from the MoveGenerator class. In addition to automated testing this program is also tested manually by playing it against chess.com's bots. These tests measure the Ai's accuracy, and provide a way to measure whether it improves over time.
 
 ## Unittests
 
 ### Ai
-The unittests of this class test, whether the algorithm reacts to selected game states as intended, and selects the correct (best) moves to a given situatiuon. These tests include solving chess puzzles and detecting checkmates.
+The unittests of this class test, whether the algorithm reacts to selected game states as intended, and selects the correct (best) moves to a given situatiuon. These tests include solving chess puzzles and detecting checkmates. In these unittests, an instance of MoveGenerator class is injected to an instance of Ai. The reason a mock class is not used is the complex nature of the class. More specifically, creating a mock set of valid moves for each recursive alphabeta call is difficult.
 
 ### Engine
 
