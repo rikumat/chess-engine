@@ -147,6 +147,72 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(legal, False)
 
 
+    def test_validate_move_notices_incorrect_squares(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "P"],
+            [".", ".", ".", "r", ".", ".", ".", "K"]
+        ]
+        engine = Engine(ai, move_generator, test_board)
+
+        validity = engine.validate_move("h1h0", True)
+        self.assertEqual(validity, 'Invalid move')
+
+        validity = engine.validate_move("h1h", True)
+        self.assertEqual(validity, 'Invalid move')
+
+        validity = engine.validate_move("h1i1", True)
+        self.assertEqual(validity, 'Invalid move')
+    
+    def test_validate_move_notices_legal_move(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "P"],
+            [".", ".", ".", "r", ".", ".", ".", "K"]
+        ]
+        engine = Engine(ai, move_generator, test_board)
+        validity = engine.validate_move("h1g2", True)
+        self.assertEqual(validity, True)
+    
+    def test_validate_move_notices_illegal_move(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "P"],
+            [".", ".", ".", "r", ".", ".", ".", "K"]
+        ]
+        engine = Engine(ai, move_generator, test_board)
+        validity = engine.validate_move("h1h2", True)
+        self.assertEqual(validity, "Illegal move")
+
+        validity = engine.validate_move("h2h3", True)
+        self.assertEqual(validity, "Illegal move")
+
+
+    
+
+
+
+
+
+
+
+
+
     
     
     

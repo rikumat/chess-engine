@@ -66,8 +66,11 @@ class Engine():
     def validate_move(self, move, is_white):
         letters = "abcdefgh"
         numbers = "12345678"
+        if len(move)!=4:
+            return "Invalid move"
+
         valid = move[0] in letters and move[1] in numbers and move[2] in letters and move[3] in numbers
-        if len(move) !=4 or not valid:
+        if not valid:
             return "Invalid move"
 
         if not self.move_is_legal(move, is_white):
