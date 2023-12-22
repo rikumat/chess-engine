@@ -26,9 +26,11 @@ class Engine():
         self.previous_state=None
 
     def reset(self):
+        """return board to the state given in constructor (board)"""
         self.board = [x[::] for x in self.starting_position[::]]
 
     def move_is_legal(self, move, is_white):
+        """return true if move is legal, False otherwise."""
         if not move in self.move_generator.get_moves_from_board(self.board, is_white):
             return False
 
@@ -145,7 +147,7 @@ class Engine():
             move = input("Enter your move: ")
 
             if move == "cancel":
-                if self.previous_state!=None:
+                if self.previous_state is not None:
                     self.board = deepcopy(self.previous_state)
                 continue
 

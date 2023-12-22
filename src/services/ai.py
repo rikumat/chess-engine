@@ -1,5 +1,5 @@
-import utils
 from datetime import datetime
+import utils
 from location_values import location_values
 
 bias=0
@@ -107,13 +107,13 @@ class Ai():
             return (cached_move[0], cached_move[1])
 
         if maximizing:
-            if cached_move!= None:
+            if cached_move is not None:
                 alpha = max(alpha, cached_move[0])
             best_move=None
             max_eval=-10**15
             moves = self.move_generator.get_moves_from_board(board, True)
             broken=False
-            if first_move!=None and moves[-1]!=first_move:
+            if first_move is not None and moves[-1]!=first_move:
                 moves.append(first_move)
 
             for i in range(len(moves)-1, -1, -1):
@@ -176,7 +176,7 @@ class Ai():
 
             return max_eval, best_move
 
-        if cached_move!= None:
+        if cached_move is not None:
             beta = min(beta, cached_move[0])
 
         min_eval = 10**15
@@ -184,7 +184,7 @@ class Ai():
         broken=False
 
         moves = self.move_generator.get_moves_from_board(board, False)
-        if first_move!=None and moves[-1]!=first_move:
+        if first_move is not None and moves[-1]!=first_move:
             moves.append(first_move)
 
         for i in range(len(moves)-1, -1, -1):
