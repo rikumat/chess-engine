@@ -82,7 +82,7 @@ class MoveGenerator():
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
-        
+
         for i in range(coordinates[1]-1, -1, -1):
             taken_piece = board[coordinates[0]][i]
             if (taken_piece.islower() == current_piece.islower() and taken_piece !="."):
@@ -92,7 +92,7 @@ class MoveGenerator():
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
-        
+
         for i in range(coordinates[1]+1, 8):
             taken_piece = board[coordinates[0]][i]
             if (taken_piece.islower() == current_piece.islower() and taken_piece !="."):
@@ -104,7 +104,7 @@ class MoveGenerator():
                 break
 
         return legal
- 
+
 
     def get_diagonal_moves(self, board, square):
         """
@@ -141,7 +141,7 @@ class MoveGenerator():
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
-        
+
         for i in range(1, left_top_limit):
             legal_coordinate = (coordinates[0]-i, coordinates[1]-i)
             taken_piece = board[legal_coordinate[0]][legal_coordinate[1]]
