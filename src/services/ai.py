@@ -1,8 +1,8 @@
+import utils
 from datetime import datetime
 from location_values import location_values
 
 bias=0
-import utils
 
 values = {
     ".":0,
@@ -103,7 +103,7 @@ class Ai():
         first_move = memo.get(board_key)
         cached_move = memo.get(transposition_key)
 
-        if cached_move != None and cached_move[2]==0:
+        if cached_move is not None and cached_move[2]==0:
             return (cached_move[0], cached_move[1])
 
         if maximizing:
@@ -146,7 +146,7 @@ class Ai():
                     balance_change+=values[current_piece_after]
                     balance_change-=values[current_piece]
                     balance_change+=location_values[current_piece_after][coords_end[0]][coords_end[1]]
-                
+
                 game_data["balance"]+=round(balance_change, 4)
 
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, memo)
@@ -168,15 +168,15 @@ class Ai():
                     memo[transposition_key]=(evaluation, best_move, 1)
                     broken=True
                     break
-            
+
             memo[board_key]=best_move
 
             if not broken:
                 memo[transposition_key]=(max_eval, best_move, 0)
 
             return max_eval, best_move
-        
-        if cached_move!= None: 
+
+        if cached_move!= None:
             beta = min(beta, cached_move[0])
 
         min_eval = 10**15
@@ -198,7 +198,7 @@ class Ai():
 
             if piece_taken=="K":
                 game_data["winner"]=-1
-            
+
             if coords_end[0]==7 and current_piece=="p":
                 board[coords_start[0]][coords_start[1]]="q"
                 current_piece_after="q"

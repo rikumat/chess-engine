@@ -11,12 +11,12 @@ letter_to_number = {
 number_to_letter = {number:letter for letter, number in letter_to_number.items()}
 
 def square_to_coordinates(square):
-        """
-        convert chess square to coordinates (y, x) of a 2-dimensional list.
-        """
-        x=letter_to_number[square[0]]
-        y=8-int(square[1])
-        return (y, x)
+    """
+    convert chess square to coordinates (y, x) of a 2-dimensional list.
+    """
+    x=letter_to_number[square[0]]
+    y=8-int(square[1])
+    return (y, x)
 
 def coordinates_to_square(coordinates):
     """

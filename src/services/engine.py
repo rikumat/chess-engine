@@ -1,5 +1,5 @@
-import utils
 from copy import deepcopy
+import utils
 
 start_board = [
         ["r", "n", "b", "q", "k", "b", "n", "r"],
@@ -27,7 +27,7 @@ class Engine():
 
     def reset(self):
         self.board = [x[::] for x in self.starting_position[::]]
-    
+
     def move_is_legal(self, move, is_white):
         if not move in self.move_generator.get_moves_from_board(self.board, is_white):
             return False
@@ -102,16 +102,16 @@ class Engine():
         start = utils.square_to_coordinates(move[:2])
         end=utils.square_to_coordinates(move[2:])
         if self.board[start[0]][start[1]]=="p" and end[0]==7:
-            self.board[start[0]][start[1]]="q" 
+            self.board[start[0]][start[1]]="q"
 
         if self.board[start[0]][start[1]]=="P" and end[0]==0:
-            self.board[start[0]][start[1]]="Q" 
+            self.board[start[0]][start[1]]="Q"
 
         self.board[end[0]][end[1]]=self.board[start[0]][start[1]]
         self.board[start[0]][start[1]]="."
 
         return True
-    
+
     def ending_menu(self, winner, ending):
         """returns True if the player wants to play again,
         false otherwise."""
@@ -153,10 +153,10 @@ class Engine():
                 break
 
             self.previous_state=deepcopy(self.board)
-            
+
             result = self.validate_move(move, True)
 
-            if result != True:
+            if result is not True:
                 print(result)
                 continue
 
@@ -166,7 +166,7 @@ class Engine():
 
             if self.check_end_condition(False):
                 replay = self.ending_menu("Player", self.check_end_condition(False))
-                if replay: 
+                if replay:
                     self.reset()
                     continue
                 break
@@ -174,7 +174,3 @@ class Engine():
             value, ai_move = self.ai.calculate_move(self.board, False)
             print("computer moves {}".format(ai_move))
             self.make_move(ai_move)
-
-
-
-

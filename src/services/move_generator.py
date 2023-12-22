@@ -72,7 +72,7 @@ class MoveGenerator():
 
             if taken_piece.islower() != current_piece.islower() and taken_piece!=".":
                 break
-        
+
         for i in range(coordinates[0]+1, 8):
             taken_piece = board[i][coordinates[1]]
             if (taken_piece.islower() == current_piece.islower() and taken_piece !="."):
@@ -195,7 +195,7 @@ class MoveGenerator():
             return legal
 
         if coordinates[0]==1 and board[2][coordinates[1]]=="." and board[3][coordinates[1]]==".":
-                legal.append(square+utils.coordinates_to_square((3, coordinates[1])))
+            legal.append(square+utils.coordinates_to_square((3, coordinates[1])))
 
         if board[coordinates[0]+1][coordinates[1]]==".":
             legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1])))
@@ -203,7 +203,9 @@ class MoveGenerator():
         if coordinates[1]+1<=7:
             eat_right = board[coordinates[0]+1][coordinates[1]+1]
             if not eat_right.islower() and eat_right!=".":
-                legal.append(square+utils.coordinates_to_square((coordinates[0]+1, coordinates[1]+1)))
+                legal.append(square+utils.coordinates_to_square(
+                    (coordinates[0]+1, coordinates[1]+1)
+                ))
 
         if coordinates[1]-1>=0:
             eat_left = board[coordinates[0]+1][coordinates[1]-1]
@@ -281,7 +283,7 @@ class MoveGenerator():
                 value+=location_values[own][coords_end[0]][coords_end[1]]
                 value-=location_values[own][coords_start[0]][coords_start[1]]
                 return round(value, 3)
-            
+
             if own.lower()!="k":
                 value += location_values[own][coords_end[0]][coords_end[1]]
                 value -= location_values[own][coords_start[0]][coords_start[1]]
@@ -300,4 +302,3 @@ class MoveGenerator():
 
         legal.sort(key=move_sort)
         return legal
-
