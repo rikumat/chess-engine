@@ -64,6 +64,10 @@ class Engine():
         return False
 
     def validate_move(self, move, is_white):
+        """
+        returns True if the move is valid and legal, 'invalid move' if the move is invalid and
+        'Illegal move' if the move is valid but not legal.
+        """
         letters = "abcdefgh"
         numbers = "12345678"
         if len(move)!=4:
@@ -79,6 +83,7 @@ class Engine():
         return True
 
     def print_board(self):
+        """print the chessboard in a user friendly way."""
         board = deepcopy(self.board)
         letters = "#  A B C D E F G H  #"
         print(letters, flush=True)
@@ -108,6 +113,8 @@ class Engine():
         return True
     
     def ending_menu(self, winner, ending):
+        """returns True if the player wants to play again,
+        false otherwise."""
         if ending=="checkmate":
             print("{} wins by checkmate".format(winner))
         else:

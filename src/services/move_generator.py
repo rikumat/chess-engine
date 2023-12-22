@@ -170,6 +170,8 @@ class MoveGenerator():
 
 
     def get_pawn_moves(self, board, square):
+        """returns a list of legal moves on a chessboard
+        from given square, when the piece to be moved is a pawn."""
         coordinates = utils.square_to_coordinates(square)
         legal = []
 
@@ -210,10 +212,14 @@ class MoveGenerator():
         return legal
 
     def get_queen_moves(self, board, square):
+        """returns a list of legal moves on a chessboard
+        from given square, when the piece to be moved is a queen."""
         return self.get_diagonal_moves(board, square)+self.get_vertical_and_horizontal_moves(board, square)
 
 
     def get_knight_moves(self, board, square):
+        """returns a list of legal moves on a chessboard
+        from given square, when the piece to be moved is a knight."""
         legal = []
         coordinates = utils.square_to_coordinates(square)
         current = board[coordinates[0]][coordinates[1]]
@@ -229,6 +235,8 @@ class MoveGenerator():
         return legal
 
     def get_king_moves(self, board, square):
+        """returns a list of legal moves on a chessboard
+        from given square, when the piece to be moved is a king."""
         legal=[]
         coordinates = utils.square_to_coordinates(square)
         current = board[coordinates[0]][coordinates[1]]
