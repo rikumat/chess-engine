@@ -45,9 +45,6 @@ class MoveGenerator():
         from a given square on a given board.
         """
 
-    def reset(self):
-        self.moves = []
-
     def coordinates_valid(self, coordinates):
         """
         check if coordiates (y, x) are on a chessboard.

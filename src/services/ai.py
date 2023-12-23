@@ -55,7 +55,7 @@ class Ai():
 
         return round(balance, 3)
 
-    def evaluate(self, board, game_data):
+    def evaluate(self, game_data):
         """
         This function numerically evaluates a chess board. 
         Positive valuation means advantage for white,
@@ -96,7 +96,7 @@ class Ai():
             return game_data["winner"]*10**10+game_data["winner"]*depth, None
 
         if depth==0:
-            return self.evaluate(board, game_data), None
+            return self.evaluate(game_data), None
 
         board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
         transposition_key=board_key+"|"+str(depth)

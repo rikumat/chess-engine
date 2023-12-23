@@ -41,21 +41,29 @@ class Engine():
 
         original_board = deepcopy(self.board)
         self.make_move(move)
-        value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
+        value, move = self.ai.alphabeta(self.board, -10**15, 10**15,
+                                        {"balance":0, "winner":0},
+                                        1, not is_white, {})
         self.board=deepcopy(original_board)
 
         return not value == checkmate_value[is_white]
 
     def check_end_condition(self, is_white):
         """
-        returns 'checkmate' if player has been checkmated, 'stalemate' if the game is in stalemate, False otherwise.
+        returns 'checkmate' if player has been checkmated, 
+        'stalemate' if the game is in stalemate, False otherwise.
         """
         checkmate_value={
             False: 10**10,
             True: -10**10
         }
-        eating_value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 1, not is_white, {})
-        move_value, move = self.ai.alphabeta(self.board, -10**15, 10**15, {"balance":0, "winner":0}, 2, is_white, {})
+        eating_value, move = self.ai.alphabeta(self.board, -10**15, 10**15,
+                                               {"balance":0, "winner":0},
+                                               1, not is_white, {})
+
+        move_value, move = self.ai.alphabeta(self.board, -10**15, 10**15,
+                                             {"balance":0, "winner":0},
+                                             2, is_white, {})
 
         if eating_value != checkmate_value[is_white] and move_value==checkmate_value[is_white]:
             return "stalemate"
@@ -118,7 +126,7 @@ class Engine():
         """returns True if the player wants to play again,
         false otherwise."""
         if ending=="checkmate":
-            print("{} wins by checkmate".format(winner))
+            print(f"{winner} wins by checkmate")
         else:
             print("Draw by stalemate")
 
@@ -174,5 +182,5 @@ class Engine():
                 break
 
             value, ai_move = self.ai.calculate_move(self.board, False)
-            print("computer moves {}".format(ai_move))
+            print(f"computer moves {ai_move}")
             self.make_move(ai_move)

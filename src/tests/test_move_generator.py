@@ -126,8 +126,7 @@ class TestMoveGenerator(unittest.TestCase):
         test_board[5][6]="p"
         test_board[5][4]="p"
         test_board[4][4]="Q"
-        
-        self.move_generator.reset()
+
         moves = self.move_generator.get_king_moves(test_board, "f3")
         self.assertCountEqual(moves, ['f3g2', 'f3e2', 'f3g4', 'f3e4'])
 
