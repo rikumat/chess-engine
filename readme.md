@@ -5,7 +5,7 @@ Chess engine written in python. This engine will have a commandline interface, w
 
 ## Usage
 This project uses poetry. You need to have poetry installed in order to run the tests. However, you can still play the game by running the index.py file in the src directory without poetry.
-Once you have installed poetry, use the following commands to play the game:
+Once you have installed poetry, you can use the following commands in the project's root directory:
 
 To install dependencies, run the following command in the project's root folder:
 ~~~
