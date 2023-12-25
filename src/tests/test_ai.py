@@ -90,4 +90,34 @@ class TestAi(unittest.TestCase):
         self.assertEqual(move[3], "8")
         self.assertNotEqual(move[2], "e")
 
+    def test_alphabeta_eats_knight_depth_1(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", "N", ".", ".", ".", ".", "."],
+            [".", ".", ".", "P", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", "q", ".", ".", "P", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+        value, move = self.ai.alphabeta(test_board, -10**15, 10**15, {"balance":0, "winner":0}, 1, False, {})
+        self.assertEqual(move, "c3c6")
+
+    def test_alphabeta_does_not_knight_depth_2(self):
+        test_board = [
+            ["k", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", "N", ".", ".", ".", ".", "."],
+            [".", ".", ".", "P", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", "q", ".", ".", "P", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", "K"]
+        ]
+        value, move = self.ai.alphabeta(test_board, -10**15, 10**15, {"balance":0, "winner":0}, 2, False, {})
+        self.assertEqual(move, "c3f3")
+
+
+
 

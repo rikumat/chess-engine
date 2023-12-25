@@ -23,7 +23,7 @@ Ai's functionality is also tested with integration tests. These tests are define
 
 # Test coverage
 on 18.12.2023 test branch coverage of tested files is 86%.
-![alt text](./images/coverage_18-12-2023.png)
+![alt text](./images/coverage_25-12-2023.png)
 
 
 # Accuracy tests

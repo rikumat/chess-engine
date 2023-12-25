@@ -181,12 +181,10 @@ class MoveGenerator():
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1])))
 
             if coordinates[1]+1<=7 and board[coordinates[0]-1][coordinates[1]+1].islower():
-                taken_piece = board[coordinates[0]-1][coordinates[1]+1]
 
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]+1)))
 
             if coordinates[1]-1>=0 and board[coordinates[0]-1][coordinates[1]-1].islower():
-                taken_piece = board[coordinates[0]-1][coordinates[1]-1]
                 legal.append(square+utils.coordinates_to_square((coordinates[0]-1, coordinates[1]-1)))
 
             return legal

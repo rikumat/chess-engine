@@ -17,6 +17,7 @@ values = {
     "B":30+bias,
     "P":10+bias,
 }
+
 letter_to_number = {
     "a":0,
     "b":1,
@@ -27,52 +28,36 @@ letter_to_number = {
     "g":6,
     "h":7
 }
-number_to_letter = {number:letter for letter, number in letter_to_number.items()}
 
+player_number={
+    True: "1",
+    False: "0"
+}
+
+number_to_letter = {number:letter for letter, number in letter_to_number.items()}
 
 
 class Ai():
     """This class is responsible for calculating a chess move given an arbitrary position."""
     def __init__(self, move_generator):
+        """
+        Save injected MoveGenerator Instance to self.move_generator
+        """
+
         self.move_generator = move_generator
-
-    def calculate_balance(self, board):
-        """
-        This method takes a chessboard as an argument and returns the material balance
-        Where 0 is equal position, negative number indicates black's advantage and positive
-        the advantage of white.
-        """
-        balance=0
-
-        for i, row in enumerate(board):
-            for j, piece in enumerate(row):
-                if piece.lower()!="k":
-                    balance += values[piece]
-                    if piece.islower():
-                        balance -= location_values[piece][i][j]
-                        continue
-                    balance+=location_values[piece][i][j]
-
-        return round(balance, 3)
-
-    def evaluate(self, game_data):
-        """
-        This function numerically evaluates a chess board. 
-        Positive valuation means advantage for white,
-        negative means advantage for black.
-        """
-        value = round(game_data["balance"], 5)
-        return value
 
     def calculate_move(self, board, white):
         """This function takes a chessboard as an argument, 
         and returns the best possible move according to the alphabeta function.
+        Iterative deepening is used to dynamically calculate deeper if calculation happens faster.
         """
-        cached_moves = {}
-        game_data = {}
-        game_data["balance"] = 0
-        game_data["winner"]=0
+
         value, move = 0, 0
+        cached_moves = {}
+        game_data = {
+            "balance": 0,
+            "winner": 0
+        }
         for i in range(4, 15):
             start_time = datetime.now()
             value, move = self.alphabeta(board, -10**15, 10**15, game_data, i, white, cached_moves)
@@ -87,16 +72,11 @@ class Ai():
         from a given chessboard.
         """
 
-        player_number={
-            True: "1",
-            False: "0"
-        }
-
         if game_data["winner"] != 0:
             return game_data["winner"]*10**10+game_data["winner"]*depth, None
 
         if depth==0:
-            return self.evaluate(game_data), None
+            return round(game_data["balance"], 3), None
 
         board_key = "".join(["".join(x) for x in board])+player_number[maximizing]
         transposition_key=board_key+"|"+str(depth)
@@ -147,7 +127,7 @@ class Ai():
                     balance_change-=values[current_piece]
                     balance_change+=location_values[current_piece_after][coords_end[0]][coords_end[1]]
 
-                game_data["balance"]+=round(balance_change, 4)
+                game_data["balance"]+=round(balance_change, 3)
 
                 evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, False, memo)
 
@@ -217,7 +197,7 @@ class Ai():
                 balance_change+=location_values[current_piece][coords_start[0]][coords_start[1]]
                 balance_change-=location_values[current_piece_after][coords_end[0]][coords_end[1]]
 
-            game_data["balance"]+=round(balance_change, 4)
+            game_data["balance"]+=round(balance_change, 3)
 
             evaluation, next_move = self.alphabeta(board, alpha, beta, game_data, depth-1, True, memo)
 

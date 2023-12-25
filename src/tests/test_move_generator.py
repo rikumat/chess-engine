@@ -130,6 +130,17 @@ class TestMoveGenerator(unittest.TestCase):
         moves = self.move_generator.get_king_moves(test_board, "f3")
         self.assertCountEqual(moves, ['f3g2', 'f3e2', 'f3g4', 'f3e4'])
 
+    def test_get_queen_moves_gets_all_moves(self):
+        test_board = copy.deepcopy(empty_board)
+        test_board[5][5]="Q"
+        moves_queen = self.move_generator.get_queen_moves(test_board, "f3")
+        vertical_horizontal = self.move_generator.get_vertical_and_horizontal_moves(test_board, "f3")
+        diagonal = self.move_generator.get_diagonal_moves(test_board, "f3")
+        combined = vertical_horizontal+diagonal
+
+        self.assertCountEqual(moves_queen, combined)
+    
+
     def test_get_all_moves_returns_all_moves(self):
         test_board = [
             ["r", "n", "b", "q", "k", "b", "n", "r"],
@@ -162,5 +173,7 @@ class TestMoveGenerator(unittest.TestCase):
                                 'g7g6',
                                 'h7h5',
                                 'h7h6'])
+
+        
         
 
